@@ -1,0 +1,68 @@
+﻿
+html{
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
+/*body {
+    -moz-transform: scaleX(-1) !important;
+    -o-transform: scaleX(-1) !important;
+    -webkit-transform: scaleX(-1) !important;
+    transform: scaleX(-1) !important;
+    filter: FlipH !important;
+    -ms-filter: "FlipH" !important;
+    font-family: cairo !important;
+}*/
+
+
+p, a, h1, h2, span, h3, h4, h5, h6, text, i, form, img {
+    -moz-transform: scaleX(-1) !important;
+    -o-transform: scaleX(-1) !important;
+    -webkit-transform: scaleX(-1) !important;
+    transform: scaleX(-1) !important;
+    filter: FlipH !important;
+    -ms-filter: "FlipH" !important;
+}
+
+
+.fa, oi {
+    -moz-transform: scaleX(1) !important;
+    -o-transform: scaleX(1) !important;
+    -webkit-transform: scaleX(1) !important;
+    transform: scaleX(1) !important;
+    filter: FlipH-1 !important;
+    -ms-filter: "FlipH-1" !important;
+}
+
+
+input, textarea {
+    text-align: right !important;
+}
+
+.arFlip {
+    -moz-transform: scaleX(-1) !important;
+    -o-transform: scaleX(-1) !important;
+    -webkit-transform: scaleX(-1) !important;
+    transform: scaleX(-1) !important;
+    filter: FlipH !important;
+    -ms-filter: "FlipH" !important;
+}
+
+.arFlip-1 {
+    -moz-transform: scaleX(1) !important;
+    -o-transform: scaleX(1) !important;
+    -webkit-transform: scaleX(1) !important;
+    transform: scaleX(1) !important;
+    filter: FlipH-1 !important;
+    -ms-filter: "FlipH-1" !important;
+}
+
+/**/
+
+.arAlign {
+    text-align: right !important;
+}
+
+.arRight {
+    right: 0 !important;
+}

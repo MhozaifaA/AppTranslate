@@ -1,13 +1,13 @@
 ﻿@inherits LayoutComponentBase
-
+@inject AppTranslate.Translate.IAppTranslate  Translate
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <div class="main">
-        <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <div class="top-row px-4 arFlip">
+            <a href="http://blazor.net" target="_blank" class="ml-md-auto">@Translate["About"]</a>
         </div>
 
         <div class="content px-4">
@@ -15,3 +15,17 @@
         </div>
     </div>
 </div>
+
+@code{
+    protected override void OnInitialized()
+    {
+        Translate.OnChange += StateHasChanged;
+    }
+
+
+    public void Dispose()
+    {
+        Translate.OnChange -= StateHasChanged;
+    }
+
+}

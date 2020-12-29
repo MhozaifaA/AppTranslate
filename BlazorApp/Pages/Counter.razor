@@ -2,20 +2,28 @@
 @using AppTranslate
 @inject AppTranslate.Translate.IAppTranslate Translate
 @implements IDisposable
+@using Microsoft.AspNetCore.Components.Web.Extensions.Head
+
+
+<h1 class="arFlip-1 arAlign">@Translate["Counter"]</h1>
+
+<p class="arFlip-1 arAlign">@Translate["Current count"]: @currentCount</p>
+
+<button class="btn btn-primary d-flex" @onclick="IncrementCount">@Translate["Click me"]</button>
+
+<h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
 
 
 
-<h1>Counter</h1>
+<Title Value="@currentCount.ToString()"></Title>
 
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
-<h1>@Translate["Hello"]</h1>
-
-
+@if (Translate.Language == "ar")
+{
+    <Link href="css/arapp.css" rel="stylesheet" />
+}
 
 @code {
+    private string style { get; set; }
     private int currentCount = 0;
     private void IncrementCount()
     {

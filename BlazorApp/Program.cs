@@ -20,7 +20,18 @@ namespace BlazorApp
 
            
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus( ("Hello" , "ãÑÍÈÇ") ) );
+            builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus(
+                ("Hello" , "ãÑÍÈÇ"),
+                ("Counter", "ÚÏÇÏ"),
+                ("Current count", "ÇáÚÏÏ ÇáÍÇáí"),
+                ("Click me", "ÅäŞÑäí"),
+                ("BlazorApp", "ÊØÈíŞ ÈáÒæÑ"),
+                ("About", "Úä"),
+                ("Fetch data", "ÌáÈ ÇáÈíÇäÇÊ"),
+                ("Home", "ÇáãäÒá"),
+                ("Welcome to your new app", "ãÑÍÈÇ Èß ÈÊØÈíŞß ÇáÌÏíÏ"),
+                ("Hello, world!","ãÑÍÈÇğ, ÈÇáÚÇáã!")
+                ) );
 
             await builder.Build().RunAsync();
         }
