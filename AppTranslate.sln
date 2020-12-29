@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\Blaz
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazorServer", "BlazorServer", "{6AADDAD2-AF87-4212-8AD3-0936654305D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppServer", "BlazorAppServer\BlazorAppServer.csproj", "{AFE491F8-64EA-4464-8E41-76C9887B5131}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppServer", "BlazorAppServer\BlazorAppServer.csproj", "{AFE491F8-64EA-4464-8E41-76C9887B5131}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{F0B3AFB2-C87C-48C9-8BBE-B6F869BAA0E5}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\NewHorizons\slides\sample.gif = ..\..\..\Desktop\NewHorizons\slides\sample.gif
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

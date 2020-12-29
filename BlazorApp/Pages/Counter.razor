@@ -11,6 +11,9 @@
 
 <button class="btn btn-primary d-flex" @onclick="IncrementCount">@Translate["Click me"]</button>
 
+<button class="btn btn-primary d-flex my-2" @onclick="ChangeLanguge">@Translate["Change language"]</button>
+
+
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
 
 
@@ -28,6 +31,10 @@
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private void ChangeLanguge()
+    {
         Translate.Switch();
     }
 

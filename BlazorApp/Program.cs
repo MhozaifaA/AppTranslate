@@ -30,7 +30,9 @@ namespace BlazorApp
                 ("Fetch data", "ÌáÈ ÇáÈíÇäÇÊ"),
                 ("Home", "ÇáãäÒá"),
                 ("Welcome to your new app", "ãÑÍÈÇ Èß ÈÊØÈíŞß ÇáÌÏíÏ"),
-                ("Hello, world!","ãÑÍÈÇğ, ÈÇáÚÇáã!")
+                ("Hello, world!","ãÑÍÈÇğ, ÈÇáÚÇáã!"),
+                ("Change language", "ÊÛíÑ ÇááÛÉ")
+
                 ) );
 
             await builder.Build().RunAsync();
