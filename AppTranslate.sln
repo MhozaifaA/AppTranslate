@@ -17,11 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazorServer", "BlazorServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppServer", "BlazorAppServer\BlazorAppServer.csproj", "{AFE491F8-64EA-4464-8E41-76C9887B5131}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{F0B3AFB2-C87C-48C9-8BBE-B6F869BAA0E5}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\Desktop\NewHorizons\slides\sample.gif = ..\..\..\Desktop\NewHorizons\slides\sample.gif
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,7 +45,6 @@ Global
 		{BF67CDF7-63BC-4434-A9E0-C8B21EB2B1F6} = {32B8ED77-B444-40FC-9D4B-2BB34DADDACE}
 		{6AADDAD2-AF87-4212-8AD3-0936654305D8} = {A2175E4A-D615-4E6A-8210-2A07841ACA0E}
 		{AFE491F8-64EA-4464-8E41-76C9887B5131} = {6AADDAD2-AF87-4212-8AD3-0936654305D8}
-		{F0B3AFB2-C87C-48C9-8BBE-B6F869BAA0E5} = {A2175E4A-D615-4E6A-8210-2A07841ACA0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {596C9916-6786-4A76-B5A1-41C74E45A6E3}
