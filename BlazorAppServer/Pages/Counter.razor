@@ -1,0 +1,41 @@
+﻿@page "/counter"
+@using AppTranslate
+@inject AppTranslate.Translate.IAppTranslate Translate
+@implements IDisposable
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<h1>@Translate["Hello"]</h1>
+
+
+
+@code { 
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            Translate.InjectAsync();
+    }
+
+    private int currentCount = 0;
+    private void IncrementCount()
+    {
+        currentCount++;
+        var data=Translate.Switch();
+    }
+
+    protected override void OnInitialized()
+    {
+        Translate.OnChange += StateHasChanged;
+    }
+
+
+    public void Dispose()
+    {
+        Translate.OnChange -= StateHasChanged;
+    }
+}
