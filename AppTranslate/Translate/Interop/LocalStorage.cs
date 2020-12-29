@@ -87,7 +87,7 @@ namespace AppTranslate.Translate.Interop
         }
 
 
-        private ValueTask ConsoleLog(string message)
+        public ValueTask ConsoleLog(string message)
         {
             if (ThrowUnRenderInject())  return default;
 

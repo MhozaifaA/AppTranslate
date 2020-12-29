@@ -72,6 +72,7 @@ namespace AppTranslate.Translate
 
         public void Inject()
         {
+            this.localStorage.ConsoleLog(" :::::::::::: AppTranslate Injected :::::::::::: ");
             this.localStorage.Inject();
             WriteCookie();
             NotifyStateChanged();
@@ -79,6 +80,7 @@ namespace AppTranslate.Translate
 
         public void Inject(string @default)
         {
+            this.localStorage.ConsoleLog(" :::::::::::: AppTranslate Injected :::::::::::: ");
             this.localStorage.Inject();
             WriteCookie(@default);
             NotifyStateChanged();
@@ -86,6 +88,7 @@ namespace AppTranslate.Translate
 
         public async ValueTask InjectAsync()
         {
+            await this.localStorage.ConsoleLog(" :::::::::::: AppTranslate Injected :::::::::::: ");
             this.localStorage.Inject();
             await WriteCookieAsync();
             NotifyStateChanged();
