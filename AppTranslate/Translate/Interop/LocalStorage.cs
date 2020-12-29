@@ -25,9 +25,8 @@ namespace AppTranslate.Translate.Interop
         }
 
         public LocalStorage(IJSRuntime jsRuntime, IOptions<LocalStorageOptions> options) : this(jsRuntime)
-        {   IsInjected = !options.Value.IsServerSide;
-            ConsoleLog(options.Value.IsServerSide.ToString());
-        }
+        => IsInjected = !options.Value.IsServerSide;
+        
         
 
 
