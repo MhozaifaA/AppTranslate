@@ -23,7 +23,6 @@ namespace BlazorApp
 
 
             //builder.Services.AddAppTranslateClientSide();
-            // builder.Services.AddAppTranslateClientSide(config=> config.ThesaurusPath = "thesaurus.json" );
 
             await builder.Services.AddAppTranslateClientSide(  "thesaurus.json");
 

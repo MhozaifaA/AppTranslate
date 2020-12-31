@@ -20,16 +20,10 @@ namespace AppTranslate.Translate.Option
 
         public bool IsServerSide{ get; set; }
 
-        //public string ThesaurusPath { get; set; } = string.Empty;
+        private string _ThesaurusPath ;
+        public string ThesaurusPath  => _ThesaurusPath;
 
-        //private string _ThesaurusPath= string.Empty;
-        //public  string ThesaurusPath 
-        //{
-        //    get => _ThesaurusPath;
-        //    set => new Task(async () =>{ await Thesaurus(_ThesaurusPath = value);}).Start(); 
-        //}
-        public string ThesaurusPath { get; set; }
-
+    
         public void Thesaurus(Dictionary<string, string> lang)
         {
             foreach (var item in lang)
@@ -47,20 +41,19 @@ namespace AppTranslate.Translate.Option
         //    ThesaurusPath = thesaurusPath;
         //}
       
-        public async void Thesaurus(string thesaurusPath)
-        {
-            ThesaurusPath = thesaurusPath;
+        //public async void Thesaurus(string thesaurusPath)
+        //{
+        //    _ThesaurusPath = thesaurusPath;
+        //    if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
+        //    {
+        //        var _lang =await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
+        //        foreach (var item in _lang)
+        //            Translate.Add(item.Key, item.Value);
+        //        _lang.Clear();
 
-            if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
-            {
-                var _lang =await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
-                foreach (var item in _lang)
-                    Translate.Add(item.Key, item.Value);
-                _lang.Clear();
-
-            }
-        }
-        public HttpClient httpClient { get; set; }
+        //    }
+        //}
+        //public HttpClient httpClient { get; set; }
 
 
     }

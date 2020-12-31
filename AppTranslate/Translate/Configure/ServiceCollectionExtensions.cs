@@ -34,9 +34,8 @@ namespace AppTranslate.Translate.Configure
 
         public static void AddAppTranslateClientSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
         {
-            services.Configure(configure).Configure<AppTranslateOptions>(configureOptions =>configureOptions.httpClient = services.GetHttpClientService());
             services.AddSingleton<LocalStorage>().
-                AddSingleton<IAppTranslate, AppTranslate>();
+                AddSingleton<IAppTranslate, AppTranslate>().Configure(configure);
         }
 
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
