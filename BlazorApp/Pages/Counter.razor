@@ -54,18 +54,21 @@
 
             case "fr":
                 if (Translate.ThesaurusPath == "thesaurusFR.json")
+                {
                     if (Translate.IsDefault())
                         Translate.Switch();
-                    else
-                        Translate.UpdateThesaurus("thesaurusFR.json");
-
+                }
+                else
+                    Translate.UpdateThesaurus("thesaurusFR.json");
                 Translate.Code = "fr";
                 break;
 
             case "ar":
                 if (Translate.ThesaurusPath == "thesaurus.json")
+                {
                     if (Translate.IsDefault())
                         Translate.Switch();
+                }
                 else
                     Translate.UpdateThesaurus("thesaurus.json");
                 Translate.Code = "ar";
