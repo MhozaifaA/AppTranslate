@@ -112,7 +112,7 @@ namespace AppTranslate.Translate.Interop
             IsInjected = true;
         }
 
-        public LocalStorage File()
+        public LocalStorage File() // and code
         {
             return this;
         }
