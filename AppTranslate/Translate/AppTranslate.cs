@@ -151,7 +151,6 @@ namespace AppTranslate.Translate
             Language = language;
             localStorage.SetItem(Language);
             NotifyStateChanged();
-
             return Language;
         }
 
