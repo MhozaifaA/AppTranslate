@@ -1,14 +1,7 @@
 ﻿@page "/"
 @inject AppTranslate.Translate.IAppTranslate Translate
-@using Microsoft.AspNetCore.Components.Web.Extensions.Head
 
 <h1 class="arFlip-1 arAlign">@Translate["Hello, world!"]</h1>
 
-<p class="arFlip-1 arAlign">@Translate["Welcome to your new app"].</p> 
+<p class="arFlip-1 arAlign">@Translate["Welcome to your new app"].</p>
 <h2 class="arFlip-1 arAlign">@Translate["Hello"]</h2>
-
-
-@if (Translate.Language == "ar")
-{
-    <Link href="css/arapp.css" rel="stylesheet" />
-}

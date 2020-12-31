@@ -1,8 +1,7 @@
 ﻿@page "/counter"
-@using AppTranslate
 @inject AppTranslate.Translate.IAppTranslate Translate
-@implements IDisposable
-@using Microsoft.AspNetCore.Components.Web.Extensions.Head
+@inject IJSRuntime IJSRuntime
+
 
 
 <h1 class="arFlip-1 arAlign">@Translate["Counter"]</h1>
@@ -13,21 +12,16 @@
 
 <button class="btn btn-primary d-flex my-2" @onclick="ChangeLanguge">@Translate["Change language"]</button>
 
-
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
 
 
 
-<Title Value="@currentCount.ToString()"></Title>
-
-@if (Translate.Language == "ar")
-{
-    <Link href="css/arapp.css" rel="stylesheet" />
-}
-
 @code {
-    private string style { get; set; }
     private int currentCount = 0;
+
+    [Parameter]
+    public int count { get; set; }
+
     private void IncrementCount()
     {
         currentCount++;
@@ -38,15 +32,4 @@
         Translate.Switch();
     }
 
-    protected override void OnInitialized()
-    {
-        Translate.OnChange += StateHasChanged;
-    }
-
-
-
-    public void Dispose()
-    {
-        Translate.OnChange -= StateHasChanged;
-    }
 }

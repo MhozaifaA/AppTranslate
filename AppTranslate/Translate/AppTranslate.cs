@@ -23,7 +23,7 @@ namespace AppTranslate.Translate
 
         public AppTranslate(LocalStorage localStorage, IOptions<AppTranslateOptions> Options)
         {
-            Console.WriteLine(" :::::::::::: AppTranslate Injected :::::::::::: ");
+            Console.WriteLine(" :::::::::::: AppTranslate Injected :::::::::::: " + Options.Value.Translate.Count);
 
             this.localStorage = localStorage;
 

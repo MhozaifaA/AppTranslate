@@ -18,22 +18,28 @@ namespace BlazorApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-           
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus(
-                ("Hello" , "„—Õ»«"),
-                ("Counter", "⁄œ«œ"),
-                ("Current count", "«·⁄œœ «·Õ«·Ì"),
-                ("Click me", "≈‰ﬁ—‰Ì"),
-                ("BlazorApp", " ÿ»Ìﬁ »·“Ê—"),
-                ("About", "⁄‰"),
-                ("Fetch data", "Ã·» «·»Ì«‰« "),
-                ("Home", "«·„‰“·"),
-                ("Welcome to your new app", "„—Õ»« »ﬂ » ÿ»Ìﬁﬂ «·ÃœÌœ"),
-                ("Hello, world!","„—Õ»«, »«·⁄«·„!"),
-                ("Change language", " €Ì— «··€…")
 
-                ) );
+
+            //builder.Services.AddAppTranslateClientSide();
+            // builder.Services.AddAppTranslateClientSide(config=> config.ThesaurusPath = "thesaurus.json" );
+
+            builder.Services.AddAppTranslateClientSide(  config =>  config.Thesaurus( "thesaurus.json"));
+
+            // builder.Services.AddAppTranslateClientSide(config=>  config.Thesaurus(
+            //      ("Hello", "„—Õ»«"),
+            //      ("Counter", "⁄œ«œ"),
+            //      ("Current count", "«·⁄œœ «·Õ«·Ì"),
+            //      ("Click me", "≈‰ﬁ—‰Ì"),
+            //      ("BlazorApp", " ÿ»Ìﬁ »·“Ê—"),
+            //      ("About", "⁄‰"),
+            //      ("Fetch data", "Ã·» «·»Ì«‰« "),
+            //      ("Home", "«·„‰“·"),
+            //      ("Welcome to your new app", "„—Õ»« »ﬂ » ÿ»Ìﬁﬂ «·ÃœÌœ"),
+            //      ("Hello, world!", "„—Õ»«, »«·⁄«·„!"),
+            //      ("Change language", " €Ì— «··€…")
+            //      )
+            //);
 
             await builder.Build().RunAsync();
         }

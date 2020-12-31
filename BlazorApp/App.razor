@@ -1,3 +1,8 @@
+@inject AppTranslate.Translate.IAppTranslate Translate
+@using Microsoft.AspNetCore.Components.Web.Extensions.Head
+@implements IDisposable
+
+
 <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -8,3 +13,23 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+
+@if (Translate.Language == "ar")
+{
+    Console.WriteLine("hello from hoho :"+ Translate.Translate.Count);
+    <Link href="css/arapp.css" rel="stylesheet" />
+}
+
+@code{
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Translate.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Translate.OnChange -= StateHasChanged;
+    }
+}

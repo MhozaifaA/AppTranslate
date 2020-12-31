@@ -48,7 +48,7 @@ namespace AppTranslate.Translate.Interop
                 return jSInProcessRuntime.Invoke<string>("localStorage.getItem", "Translate");
             else
                 return @default;
-                return (string) Task.Factory.StartNew(async ()=>await jsRuntime.InvokeAsync<object>("localStorage.getItem", "Translate")).Result.Result;
+                //return (string) Task.Factory.StartNew(async ()=>await jsRuntime.InvokeAsync<object>("localStorage.getItem", "Translate")).Result.Result;
         }
 
 
