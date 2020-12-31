@@ -1,6 +1,7 @@
 ﻿@page "/counter"
 @inject AppTranslate.Translate.IAppTranslate Translate
 @inject IJSRuntime IJSRuntime
+@implements IDisposable
 
 
 <h1 class="arFlip-1 arAlign">@Translate["Counter"]</h1>
@@ -10,6 +11,14 @@
 <button class="btn btn-primary d-flex" @onclick="IncrementCount">@Translate["Click me"]</button>
 
 <button class="btn btn-primary d-flex my-2" @onclick="ChangeLanguge">@Translate["Change language"]</button>
+
+<button class="btn btn-primary d-flex my-2" @onclick="ChangeFile">@Translate["Change File"]</button>
+
+<select class="form-control w-25" @onchange="HandelSelectChanged">
+    <option selected value="default">en</option>
+    <option value="ar">ar</option>
+    <option value="fr">fr</option>
+</select>
 
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
 
@@ -31,5 +40,56 @@
         Translate.Switch();
     }
 
+    private void ChangeFile()
+    {
+        Translate.UpdateThesaurus("thesaurusFR.json");
+    }
+
+
+    private void HandelSelectChanged(ChangeEventArgs e)
+    {
+        switch (e.Value.ToString())
+        {
+            case "default":
+                if (!Translate.IsDefault())
+                    Translate.Switch();
+                break;
+
+            case "fr":
+                if (Translate.ThesaurusPath == "thesaurusFR.json")
+                {
+                    if (Translate.IsDefault())
+                        Translate.Switch();
+                }
+                else
+                    Translate.UpdateThesaurus("thesaurusFR.json");
+                break;
+
+            case "ar":
+                if (Translate.ThesaurusPath == "thesaurus.json")
+                {
+                    if (Translate.IsDefault())
+                        Translate.Switch();
+                }
+                else
+                    Translate.UpdateThesaurus("thesaurus.json");
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        Translate.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Translate.OnChange -= StateHasChanged;
+    }
 
 }

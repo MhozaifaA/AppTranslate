@@ -6,10 +6,15 @@ namespace AppTranslate.Translate
 {
     public interface IAppTranslate
     {
-        public string Language { get; set; }
+
+
+
+        public string ThesaurusPath { get; set; }
         string this[string index] { get; }
 
         IReadOnlyDictionary<string, string> Translate { get; }
+        ValueTask UpdateThesaurus(string thesaurusPath);
+
 
         void Inject();
         void Inject(string @default);
@@ -22,6 +27,10 @@ namespace AppTranslate.Translate
         Task RefreshAsync();
         Task<string> SwitchAsync();
         Task<string> SwitchAsync(string language);
+
+
+        bool IsDefault();
+
 
         event Action OnChange;
     }

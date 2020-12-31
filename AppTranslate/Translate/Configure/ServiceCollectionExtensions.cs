@@ -19,17 +19,13 @@ namespace AppTranslate.Translate.Configure
            return serviceProvider.GetRequiredService<HttpClient>();
         }
 
-        public static void AddAppTranslateClientSide(this IServiceCollection services)
-        {
-            services.AddSingleton<LocalStorage>().
-                   AddSingleton<IAppTranslate, AppTranslate>();
-        }
-
-        public static async Task AddAppTranslateClientSide(this IServiceCollection services,string ThesaurusPath)
+      
+        public static async Task AddAppTranslateClientSide(this IServiceCollection services, string ThesaurusPath)
         {
             var http = services.GetHttpClientService();
             var data = await http.GetFromJsonAsync<Dictionary<string, string>>(ThesaurusPath);
-            services.AddAppTranslateClientSide(  config =>  config.Thesaurus(data));
+            services.AddAppTranslateClientSide(config => { 
+                config.httpClient = http; config.ThesaurusPath = ThesaurusPath;  config.Thesaurus(data); });
         }
 
         public static void AddAppTranslateClientSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
@@ -38,6 +34,8 @@ namespace AppTranslate.Translate.Configure
                 AddSingleton<IAppTranslate, AppTranslate>().Configure(configure);
         }
 
+
+
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
         {
             services.AddScoped<LocalStorage>().Configure<LocalStorageOptions>(configureOptions =>
@@ -45,8 +43,10 @@ namespace AppTranslate.Translate.Configure
                 AddScoped<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(configureOptions =>
                 {
                     configureOptions.IsServerSide = true;
+                    configureOptions.httpClient = services.GetHttpClientService();
                     configure?.Invoke(configureOptions);
                 });
         }
+
     }
 }

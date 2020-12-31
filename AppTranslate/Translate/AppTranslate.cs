@@ -17,12 +17,13 @@ namespace AppTranslate.Translate
     public class AppTranslate : IAppTranslate
     {
 
-        public IReadOnlyDictionary<string, string> Translate { get; }
+        public IReadOnlyDictionary<string, string> Translate { get; set; }
 
-        const string defaultLanguange = "default";
-        const string undefaultLanguange = "undefault";
+        public const string defaultLanguange = "default";
+        public const string undefaultLanguange = "undefault";
 
-        public string Language { get; set; }
+        private string Language { get; set; }
+        public string ThesaurusPath { get; set; }
 
         public string this[string index]
         {
@@ -34,6 +35,8 @@ namespace AppTranslate.Translate
             }
         }
 
+        private readonly HttpClient httpClient;
+
         private readonly LocalStorage localStorage;
 
         public AppTranslate(LocalStorage localStorage, IOptions<AppTranslateOptions> Options)
@@ -42,18 +45,34 @@ namespace AppTranslate.Translate
             Console.WriteLine(" :::::::::::: AppTranslate Injected :::::::::::: ");
 
             this.localStorage = localStorage;
+            this.httpClient = Options.Value.httpClient;
+            this.ThesaurusPath = Options.Value.ThesaurusPath;
 
             WriteCookie();
 
             Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
         }
 
-      
+
+
+        public async ValueTask UpdateThesaurus(string thesaurusPath)
+        {
+            ThesaurusPath = thesaurusPath;
+            if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
+            {
+                var _lang =await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
+                    Translate = new ReadOnlyDictionary<string, string>(_lang);
+              //  _lang.Clear();
+            }
+            Language = undefaultLanguange;
+            NotifyStateChanged();
+        }
+
+
 
 
         private void WriteCookie()
         {
-
             Language =  localStorage.GetItem();
 
             if (string.IsNullOrEmpty(Language))
@@ -82,10 +101,9 @@ namespace AppTranslate.Translate
             if (string.IsNullOrEmpty(Language))
             {
                 Language = defaultLanguange;
-               await localStorage.SetItemAsync(defaultLanguange);
+                await localStorage.SetItemAsync(defaultLanguange);
             }
         }
-
 
 
         public void Inject()
@@ -112,7 +130,7 @@ namespace AppTranslate.Translate
             NotifyStateChanged();
         }
 
-
+        
 
         public void Refresh()
         {
@@ -138,9 +156,6 @@ namespace AppTranslate.Translate
 
 
 
-
-
-
         public async Task RefreshAsync()
         {
             Language = await localStorage.GetItemAsync();
@@ -162,6 +177,10 @@ namespace AppTranslate.Translate
             return Language;
         }
 
+
+        public bool IsDefault()
+        => Language == defaultLanguange;
+        
 
 
         public event Action OnChange;

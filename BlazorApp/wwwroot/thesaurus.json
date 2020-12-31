@@ -1,14 +1,15 @@
-  {
-    "Hello": "مرحبا",
-    "Counter": "عداد",
-    "Current count": "العدد الحالي",
-    "Click me": "إنقرني",
-    "BlazorApp": "تطبيق بلزور",
-    "About": "عن",
-    "Fetch data": "جلب البيانات",
-    "Home": "المنزل",
-    "Welcome to your new app": "مرحبا بك بتطبيقك الجديد",
-    "Hello, world!": "مرحباً, بالعالم!",
-    "Change language": "تغير اللغة"
-  }
+{
+  "Hello": "مرحبا",
+  "Counter": "عداد",
+  "Current count": "العدد الحالي",
+  "Click me": "إنقرني",
+  "BlazorApp": "تطبيق بلزور",
+  "About": "عن",
+  "Fetch data": "جلب البيانات",
+  "Home": "المنزل",
+  "Welcome to your new app": "مرحبا بك بتطبيقك الجديد",
+  "Hello, world!": "مرحباً, بالعالم!",
+  "Change language": "تغير اللغة",
+  "Change File": "تغير الملف"
+}
 
