@@ -17,6 +17,9 @@ namespace AppTranslate.Translate.Option
 
     
         public Dictionary<string, string> Translate { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        public bool IsServerSide{ get; set; }
+
         //public string ThesaurusPath { get; set; } = string.Empty;
 
         //private string _ThesaurusPath= string.Empty;
@@ -25,7 +28,7 @@ namespace AppTranslate.Translate.Option
         //    get => _ThesaurusPath;
         //    set => new Task(async () =>{ await Thesaurus(_ThesaurusPath = value);}).Start(); 
         //}
-      
+
 
         public  void Thesaurus(params (string lang1, string lang2)[] lang)
         {

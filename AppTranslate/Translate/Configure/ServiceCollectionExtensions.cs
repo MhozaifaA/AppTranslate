@@ -31,8 +31,7 @@ namespace AppTranslate.Translate.Configure
                 {
                     configureOptions.wwwroot = services.GetHttpClientService();
                     configure?.Invoke(configureOptions);
-                }
-                );
+                });
         }
 
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
@@ -40,7 +39,10 @@ namespace AppTranslate.Translate.Configure
             services.AddScoped<LocalStorage>().Configure<LocalStorageOptions>(configureOptions =>
             new Action<LocalStorageOptions>(a => a.IsServerSide = true).Invoke(configureOptions)).
                 AddScoped<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(configureOptions =>
-                    configure?.Invoke(configureOptions));
+                {
+                    configureOptions.IsServerSide = true;
+                    configure?.Invoke(configureOptions);
+                });
         }
     }
 }
