@@ -2,7 +2,7 @@
 Translate(localization) razor SPA 
 
 
-<img  src="https://github.com/MhozaifaA/AppTranslate/blob/master/BlazorAppServer/Resources/sample.gif" >
+<img  src="https://github.com/MhozaifaA/AppTranslate/blob/master/BlazorApp/Resources/sample.gif" >
 sample with custom css suppurt ar/en   
 
 ### `` check source code to figure more extensions:`` https://github.com/MhozaifaA/AppTranslate/tree/master/AppTranslate/Translate
@@ -53,7 +53,9 @@ using AppTranslate.Translate.Configure;
 using AppTranslate.Translate.Configure;
 //....
     services.AddAppTranslateServerSide(config =>  config.Thesaurus(("Hello", "مرحبا")));
-//....
+//....   or 
+    services.AddAppTranslateServerSide("thesaurus.json");
+//.... 
 ```
 
 **in Component**
@@ -90,5 +92,4 @@ using AppTranslate.Translate.Configure;
 }
    
 ```
-
 
