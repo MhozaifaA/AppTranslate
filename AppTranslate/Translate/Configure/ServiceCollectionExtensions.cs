@@ -20,12 +20,12 @@ namespace AppTranslate.Translate.Configure
         }
 
       
-        public static async Task AddAppTranslateClientSide(this IServiceCollection services, string ThesaurusPath)
+        public static async Task AddAppTranslateClientSide(this IServiceCollection services, string ThesaurusPath,string code=null)
         {
             var http = services.GetHttpClientService();
             var data = await http.GetFromJsonAsync<Dictionary<string, string>>(ThesaurusPath);
             services.AddAppTranslateClientSide(config => { 
-                config.httpClient = http; config.ThesaurusPath = ThesaurusPath;  config.Thesaurus(data); });
+                config.httpClient = http; config.ThesaurusPath = ThesaurusPath; config.Code = code; config.Thesaurus(data); });
         }
 
         public static void AddAppTranslateClientSide(this IServiceCollection services, Action<AppTranslateOptions> configure)

@@ -24,7 +24,7 @@ namespace BlazorApp
 
             //builder.Services.AddAppTranslateClientSide();
 
-            await builder.Services.AddAppTranslateClientSide(  "thesaurus.json");
+            await builder.Services.AddAppTranslateClientSide(  "thesaurus.json","en");
 
             // builder.Services.AddAppTranslateClientSide(config=>  config.Thesaurus(
             //      ("Hello", "„—Õ»«"),

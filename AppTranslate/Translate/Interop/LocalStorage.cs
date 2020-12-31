@@ -52,6 +52,8 @@ namespace AppTranslate.Translate.Interop
         }
 
 
+
+
         public async ValueTask SetItemAsync(string value)
         {
             if (ThrowUnRenderInject()) return;
@@ -66,6 +68,9 @@ namespace AppTranslate.Translate.Interop
             return (await jsRuntime.InvokeAsync<string>("localStorage.getItem", "Translate").ConfigureAwait(false));
         }
      
+
+
+
 
 
         public async ValueTask SetItemAsync<T>(string key, T value)
@@ -105,6 +110,11 @@ namespace AppTranslate.Translate.Interop
         public void Inject()
         {
             IsInjected = true;
+        }
+
+        public LocalStorage File()
+        {
+            return this;
         }
 
     }

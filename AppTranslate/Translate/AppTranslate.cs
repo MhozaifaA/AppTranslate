@@ -21,7 +21,7 @@ namespace AppTranslate.Translate
 
         public const string defaultLanguange = "default";
         public const string undefaultLanguange = "undefault";
-
+        public string Code { get; set; }
         private string Language { get; set; }
         public string ThesaurusPath { get; set; }
 
@@ -47,6 +47,7 @@ namespace AppTranslate.Translate
             this.localStorage = localStorage;
             this.httpClient = Options.Value.httpClient;
             this.ThesaurusPath = Options.Value.ThesaurusPath;
+            this.Code = Options.Value.Code;
 
             WriteCookie();
 
@@ -180,7 +181,6 @@ namespace AppTranslate.Translate
 
         public bool IsDefault()
         => Language == defaultLanguange;
-        
 
 
         public event Action OnChange;

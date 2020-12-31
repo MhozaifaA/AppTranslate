@@ -11,7 +11,7 @@ namespace AppTranslate.Translate.Option
 
         public bool IsServerSide{ get; set; }
         public string ThesaurusPath { get; set; }
-
+        public string Code { get; set; }
 
         public void Thesaurus(Dictionary<string, string> lang)
         {

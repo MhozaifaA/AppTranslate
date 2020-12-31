@@ -8,6 +8,7 @@ namespace AppTranslate.Translate
     {
 
 
+        public string Code { get; set; }
 
         public string ThesaurusPath { get; set; }
         string this[string index] { get; }
@@ -30,7 +31,7 @@ namespace AppTranslate.Translate
 
 
         bool IsDefault();
-
+   
 
         event Action OnChange;
     }
