@@ -28,7 +28,13 @@ namespace AppTranslate.Translate.Option
         //    get => _ThesaurusPath;
         //    set => new Task(async () =>{ await Thesaurus(_ThesaurusPath = value);}).Start(); 
         //}
+        public string ThesaurusPath { get; set; }
 
+        public void Thesaurus(Dictionary<string, string> lang)
+        {
+            foreach (var item in lang)
+                Translate.Add(item.Key, item.Value);
+        }
 
         public  void Thesaurus(params (string lang1, string lang2)[] lang)
         {
@@ -36,19 +42,26 @@ namespace AppTranslate.Translate.Option
                     Translate.Add(item.lang1, item.lang2);
         }
 
+        //public void Thesaurus(string thesaurusPath)
+        //{
+        //    ThesaurusPath = thesaurusPath;
+        //}
+      
         public async void Thesaurus(string thesaurusPath)
         {
-            if (wwwroot is not null && !string.IsNullOrEmpty(thesaurusPath))
+            ThesaurusPath = thesaurusPath;
+
+            if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
             {
-                var _lang =await wwwroot.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
+                var _lang =await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
                 foreach (var item in _lang)
                     Translate.Add(item.Key, item.Value);
                 _lang.Clear();
 
             }
         }
+        public HttpClient httpClient { get; set; }
 
 
-        public HttpClient wwwroot {get;set;}
     }
 }

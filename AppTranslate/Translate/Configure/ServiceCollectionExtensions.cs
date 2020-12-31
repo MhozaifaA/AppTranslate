@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AppTranslate.Translate.Interop;
 using AppTranslate.Translate.Option;
 using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace AppTranslate.Translate.Configure
 {
@@ -24,14 +25,18 @@ namespace AppTranslate.Translate.Configure
                    AddSingleton<IAppTranslate, AppTranslate>();
         }
 
+        public static async Task AddAppTranslateClientSide(this IServiceCollection services,string ThesaurusPath)
+        {
+            var http = services.GetHttpClientService();
+            var data = await http.GetFromJsonAsync<Dictionary<string, string>>(ThesaurusPath);
+            services.AddAppTranslateClientSide(  config =>  config.Thesaurus(data));
+        }
+
         public static void AddAppTranslateClientSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
         {
+            services.Configure(configure).Configure<AppTranslateOptions>(configureOptions =>configureOptions.httpClient = services.GetHttpClientService());
             services.AddSingleton<LocalStorage>().
-                AddSingleton<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(configureOptions =>
-                {
-                    configureOptions.wwwroot = services.GetHttpClientService();
-                    configure?.Invoke(configureOptions);
-                });
+                AddSingleton<IAppTranslate, AppTranslate>();
         }
 
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)

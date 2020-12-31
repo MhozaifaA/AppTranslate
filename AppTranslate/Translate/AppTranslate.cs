@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using AppTranslate.Translate.Option;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Net;
 
 namespace AppTranslate.Translate
 {
@@ -15,16 +19,27 @@ namespace AppTranslate.Translate
 
         public IReadOnlyDictionary<string, string> Translate { get; }
 
+        const string defaultLanguange = "default";
+        const string undefaultLanguange = "undefault";
+
         public string Language { get; set; }
 
-        public string this[string index] => Language == "ar" ? (Translate.GetValueOrDefault(index) ?? index) : index;
+        public string this[string index]
+        {
+            get
+            {
+                if (Translate.Count == 0)
+                    return "...";
+                return Language == undefaultLanguange ? (Translate.GetValueOrDefault(index) ?? index) : index;
+            }
+        }
 
         private readonly LocalStorage localStorage;
 
         public AppTranslate(LocalStorage localStorage, IOptions<AppTranslateOptions> Options)
         {
             if(!Options.Value.IsServerSide)
-            Console.WriteLine(" :::::::::::: AppTranslate Injected :::::::::::: " + Options.Value.Translate.Count);
+            Console.WriteLine(" :::::::::::: AppTranslate Injected :::::::::::: ");
 
             this.localStorage = localStorage;
 
@@ -32,6 +47,8 @@ namespace AppTranslate.Translate
 
             Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
         }
+
+      
 
 
         private void WriteCookie()
@@ -41,8 +58,8 @@ namespace AppTranslate.Translate
 
             if (string.IsNullOrEmpty(Language))
             {
-                Language = "en";
-                 localStorage.SetItem("en");
+                 Language = defaultLanguange;
+                 localStorage.SetItem(defaultLanguange);
             }
         }
 
@@ -52,8 +69,8 @@ namespace AppTranslate.Translate
 
             if (string.IsNullOrEmpty(Language))
             {
-                Language = "en";
-                localStorage.SetItem("en");
+                Language = defaultLanguange;
+                localStorage.SetItem(defaultLanguange);
             }
         }
 
@@ -64,8 +81,8 @@ namespace AppTranslate.Translate
 
             if (string.IsNullOrEmpty(Language))
             {
-                Language = "en";
-               await localStorage.SetItemAsync("en");
+                Language = defaultLanguange;
+               await localStorage.SetItemAsync(defaultLanguange);
             }
         }
 
@@ -104,7 +121,7 @@ namespace AppTranslate.Translate
 
         public string Switch()
         {
-            Language = Language == "en" ? "ar" : "en";
+            Language = Language == defaultLanguange ? undefaultLanguange : defaultLanguange;
             localStorage.SetItem(Language);
             NotifyStateChanged();
             return Language;
@@ -131,7 +148,7 @@ namespace AppTranslate.Translate
 
         public async Task<string> SwitchAsync()
         {
-            Language = Language == "en" ? "ar" : "en";
+            Language = Language == defaultLanguange ? undefaultLanguange : defaultLanguange;
             await localStorage.SetItemAsync(Language);
             NotifyStateChanged();
             return Language;

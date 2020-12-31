@@ -15,15 +15,16 @@
 </Router>
 
 
-@if (Translate.Language == "ar")
+@if (Translate.Language == "undefault")
 {
-    Console.WriteLine("hello from hoho :"+ Translate.Translate.Count);
+    Console.WriteLine("hello from hoho :" + Translate.Translate.Count);
     <Link href="css/arapp.css" rel="stylesheet" />
 }
 
 @code{
     protected override void OnInitialized()
     {
+
         base.OnInitialized();
         Translate.OnChange += StateHasChanged;
     }

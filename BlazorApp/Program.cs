@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace BlazorApp
             //builder.Services.AddAppTranslateClientSide();
             // builder.Services.AddAppTranslateClientSide(config=> config.ThesaurusPath = "thesaurus.json" );
 
-            builder.Services.AddAppTranslateClientSide(  config =>  config.Thesaurus( "thesaurus.json"));
+            await builder.Services.AddAppTranslateClientSide(  "thesaurus.json");
 
             // builder.Services.AddAppTranslateClientSide(config=>  config.Thesaurus(
             //      ("Hello", "„—Õ»«"),
