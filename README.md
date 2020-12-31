@@ -15,7 +15,9 @@ sample with custom css suppurt ar/en
 using AppTranslate.Translate.Configure;
 //....
   builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus( ("Hello" , "مرحبا") ) );              
-//....
+//....  or 
+    services.AddAppTranslateServerSide("thesaurus.json");
+//.... 
 ```
 
 **in Component**
@@ -53,8 +55,6 @@ using AppTranslate.Translate.Configure;
 using AppTranslate.Translate.Configure;
 //....
     services.AddAppTranslateServerSide(config =>  config.Thesaurus(("Hello", "مرحبا")));
-//....   or 
-    services.AddAppTranslateServerSide("thesaurus.json");
 //.... 
 ```
 
