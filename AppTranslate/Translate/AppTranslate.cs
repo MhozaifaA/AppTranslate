@@ -22,7 +22,7 @@ namespace AppTranslate.Translate
         public const string defaultLanguange = "default";
         public const string undefaultLanguange = "undefault";
         public string Code { get; set; }
-        private string Language { get; set; }
+        private string Language { get; set; } = defaultLanguange;
         public string ThesaurusPath { get; set; }
 
         public string this[string index]
@@ -65,8 +65,7 @@ namespace AppTranslate.Translate
                     Translate = new ReadOnlyDictionary<string, string>(_lang);
               //  _lang.Clear();
             }
-            Language = undefaultLanguange;
-            NotifyStateChanged();
+            Switch(Language = undefaultLanguange);
         }
 
 
