@@ -16,7 +16,7 @@ using AppTranslate.Translate.Configure;
 //....
   builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus( ("Hello" , "مرحبا") ) );              
 //....  or 
-    services.AddAppTranslateServerSide("thesaurus.json");
+   await services.AddAppTranslateServerSide("thesaurus.json");
 //.... 
 ```
 
