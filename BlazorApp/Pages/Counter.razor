@@ -12,9 +12,9 @@
 
 
 <select class="form-control w-25" @onchange="HandelSelectChanged">
-    <option selected="@(Translate.Code=="en")" value="default">en</option>
-    <option selected="@(Translate.Code=="ar")" value="ar">ar</option>
-    <option selected="@(Translate.Code=="fr")" value="fr">fr</option>
+    <option selected="@(Translate.LanguageCode=="en")" value="default">en</option>
+    <option selected="@(Translate.LanguageCode=="ar")" value="ar">ar</option>
+    <option selected="@(Translate.LanguageCode=="fr")" value="fr">fr</option>
 </select>
 
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
@@ -38,7 +38,7 @@
 
     private void ChangeFile()
     {
-        Translate.UpdateThesaurus("thesaurusFR.json");
+        Translate.ChangeThesaurus("thesaurusFR.json");
     }
 
 
@@ -47,31 +47,31 @@
         switch (e.Value.ToString())
         {
             case "default":
-                if (!Translate.IsDefault())
-                    Translate.Switch();
-                Translate.Code = "en";
+                Translate.OnceSupportLTR();
+                if (!Translate.IsDefault)
+                    Translate.Switch("en");
                 break;
 
             case "fr":
-                if (Translate.ThesaurusPath == "thesaurusFR.json")
+                Translate.OnceSupportLTR();
+                if (Translate.Path == "thesaurusFR.json")
                 {
-                    if (Translate.IsDefault())
-                        Translate.Switch();
+                    if (Translate.IsDefault)
+                        Translate.Switch("fr");
                 }
                 else
-                    Translate.UpdateThesaurus("thesaurusFR.json");
-                Translate.Code = "fr";
+                    Translate.ChangeThesaurus("thesaurusFR.json", "fr");
                 break;
 
             case "ar":
-                if (Translate.ThesaurusPath == "thesaurus.json")
+                Translate.OnceSupportRTL();
+                if (Translate.Path == "thesaurus.json")
                 {
-                    if (Translate.IsDefault())
-                        Translate.Switch();
+                    if (Translate.IsDefault)
+                        Translate.Switch("ar");
                 }
                 else
-                    Translate.UpdateThesaurus("thesaurus.json");
-                Translate.Code = "ar";
+                    Translate.ChangeThesaurus("thesaurus.json", "ar");
                 break;
 
             default:
