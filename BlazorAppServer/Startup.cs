@@ -30,7 +30,6 @@ namespace BlazorAppServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-
             services.AddAppTranslateServerSide(config =>  config.Thesaurus(("Hello", "„—Õ»«")));
         }
 

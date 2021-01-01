@@ -38,6 +38,7 @@ namespace AppTranslate.Translate.Configure
 
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
         {
+            services.AddHttpClient();
             services.AddScoped<LocalStorage>().Configure<LocalStorageOptions>(configureOptions =>
             new Action<LocalStorageOptions>(a => a.IsServerSide = true).Invoke(configureOptions)).
                 AddScoped<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(configureOptions =>
