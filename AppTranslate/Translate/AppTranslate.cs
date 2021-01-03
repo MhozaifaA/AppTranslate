@@ -64,6 +64,8 @@ namespace AppTranslate.Translate
 
         public async ValueTask ChangeThesaurus(string thesaurusPath, string code = null)
         {
+            if (ThesaurusPath.Equals(thesaurusPath))  return;
+
             ThesaurusPath = thesaurusPath;
             if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
             {
