@@ -12,6 +12,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Net;
 using AppTranslate.Translate.Enums;
+using AppTranslate.Translate.Classes;
 
 namespace AppTranslate.Translate
 {
@@ -102,6 +103,17 @@ namespace AppTranslate.Translate
             else
                 Language = kind.ToEnum<LanguageKinds>();
         }
+
+
+        //private void WriteStorage(TranslateStorage storage=null)
+        //{
+        //    string kind = (storage is null) ? localStorage.GetItem<TranslateStorage>() :
+        //                               localStorage.GetItem<TranslateStorage>(key);
+        //    if (string.IsNullOrEmpty(kind))
+        //        localStorage.SetItem((Language = LanguageKinds.Default).ToString());
+        //    else
+        //        Language = kind.ToEnum<LanguageKinds>();
+        //}
         #endregion
 
 

@@ -44,16 +44,9 @@ namespace AppTranslate.Translate.Interop
         }
 
         #region Sync
-        public void SetItem(string value)
-        {
-            if (ThrowUnRenderInject()) return;
-            SetItem(default_localStorage_Key, value);
-        }
-        public void SetItem(string key, string value)
-        {
-            if (ThrowUnRenderInject()) return;
-            SetItem<string>(key, value);
-        }
+        public void SetItem(string value) =>  SetItem(default_localStorage_Key, value);
+        public void SetItem(string key, string value) =>  SetItem<string>(key, value);
+        public void SetItem<T>(T value) =>  SetItem<T>(default_localStorage_Key, value);
         public void SetItem<T>(string key, T value)
         {
             if (ThrowUnRenderInject()) return;
@@ -65,19 +58,13 @@ namespace AppTranslate.Translate.Interop
             else
                 jsRuntime.InvokeVoidAsync(js_localStorage_setItem, key, _value);
         }
+
         #endregion
 
         #region Async
-        public async ValueTask SetItemAsync(string value)
-        {
-            if (ThrowUnRenderInject()) return;
-            await SetItemAsync(default_localStorage_Key, value);
-        }
-        public async ValueTask SetItemAsync(string key, string value)
-        {
-            if (ThrowUnRenderInject()) return;
-            await SetItemAsync<string>(key, value);
-        }
+        public async ValueTask SetItemAsync(string value) =>  await SetItemAsync(default_localStorage_Key, value);
+        public async ValueTask SetItemAsync(string key, string value) =>  await SetItemAsync<string>(key, value);
+        public async ValueTask SetItemAsync<T>(T value) =>  await SetItemAsync<T>(default_localStorage_Key, value);
         public async ValueTask SetItemAsync<T>(string key, T value)
         {
             if (ThrowUnRenderInject()) return;
@@ -91,16 +78,9 @@ namespace AppTranslate.Translate.Interop
         #region -   GetItem   -
 
         #region Sync
-        public string GetItem()
-        {
-            if (ThrowUnRenderInject()) return default;
-            return GetItem(default_localStorage_Key);
-        }
-        public string GetItem(string key)
-        {
-            if (ThrowUnRenderInject()) return default;
-            return GetItem<string>(key);
-        }
+        public string GetItem()  => GetItem(default_localStorage_Key);
+        public string GetItem(string key) => GetItem<string>(key);
+        public T GetItem<T>() => GetItem<T>(default_localStorage_Key);
         public T GetItem<T>(string key)
         {
             if (ThrowUnRenderInject()) return default;
@@ -114,16 +94,9 @@ namespace AppTranslate.Translate.Interop
         #endregion
 
         #region Async
-        public async ValueTask<string> GetItemAsync()
-        {
-            if (ThrowUnRenderInject()) return default;
-            return await GetItemAsync(default_localStorage_Key);
-        }
-        public async ValueTask<string> GetItemAsync(string key)
-        {
-            if (ThrowUnRenderInject()) return default;
-            return await GetItemAsync<string>(key);
-        }
+        public async ValueTask<string> GetItemAsync() => await GetItemAsync(default_localStorage_Key);
+        public async ValueTask<string> GetItemAsync(string key) => await GetItemAsync<string>(key);
+        public async ValueTask<T> GetItemAsync<T>() => await GetItemAsync<T>(default_localStorage_Key);
         public async ValueTask<T> GetItemAsync<T>(string key)
         {
             if (ThrowUnRenderInject()) return default;
