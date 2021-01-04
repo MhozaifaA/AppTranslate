@@ -29,18 +29,10 @@ namespace AppTranslate.Translate
              => Translate.Count == 0 ? loadingLanguange : (Storage.Kinds == LanguageKinds.UnDefault ?
          (Translate.GetValueOrDefault(index) ?? index) : index);
 
-
-      //  private string ThesaurusPath { get; set; }
-     //   private bool SupportRTL { get; set; } = false;
-
+     
         private readonly HttpClient httpClient;
-
         private readonly LocalStorage localStorage;
-
-        //private LanguageKinds Language { get; set; } = LanguageKinds.Default;
-
         private TranslateStorage Storage = new (LanguageKinds.Default,default(string));
-
         private bool IsServerSide { get; set; }
 
 
@@ -49,12 +41,10 @@ namespace AppTranslate.Translate
         {
             this.httpClient = Options.Value.httpClient;
             this.localStorage = localStorage;
+            Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
             
             InitProperties(Options);
             WriteStorage();
-
-            Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
-
             AppLog();
         }
 
@@ -69,17 +59,18 @@ namespace AppTranslate.Translate
         public async ValueTask ChangeThesaurus(string thesaurusPath, string code = null)
         {
             this.Storage.Path = thesaurusPath;
-            await GetThesaurus(thesaurusPath);
+            await GetThesaurus();
             SwitchToUnDefault(code);
         }
 
-        private async ValueTask GetThesaurus(string thesaurusPath)
+        private async ValueTask GetThesaurus(bool notify=false)
         {
-            if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
+            if (httpClient is not null && !string.IsNullOrEmpty(this.Storage.Path))
             {
-                var _lang = await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
+                var _lang = await httpClient.GetFromJsonAsync<Dictionary<string, string>>(this.Storage.Path).ConfigureAwait(false);
                 Translate = new ReadOnlyDictionary<string, string>(_lang);
-                //  _lang.Clear();
+                if(notify)
+                NotifyStateChanged();
             }
         }
 
@@ -115,7 +106,16 @@ namespace AppTranslate.Translate
             if (Storage is null || String.IsNullOrEmpty(Storage?.Path))
                 localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path,this.Storage.Code , Storage.SupportRTL));
             else
+            {
+                if (!this.Storage.Path.Equals(Storage.Path))
+                {
+                    this.Storage = Storage;
+                    _ = GetThesaurus(true).ConfigureAwait(false);
+                  //  NotifyStateChanged();
+                }
                 this.Storage = Storage;
+
+            }
         }
 
         private async ValueTask WriteStorageAsync(string key = null)
@@ -128,7 +128,16 @@ namespace AppTranslate.Translate
             if (Storage is null)
                await localStorage.SetItemAsync<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path, this.Storage.Code, Storage.SupportRTL));
             else
+            {
+                if (!this.Storage.Path.Equals(Storage.Path))
+                {
+                    this.Storage = Storage;
+                    await GetThesaurus();
+                   // NotifyStateChanged();
+                }
                 this.Storage = Storage;
+
+            }
         }
         #endregion
 
@@ -167,14 +176,12 @@ namespace AppTranslate.Translate
         }
         public LanguageKinds SwitchToDefault(string code = null)
         {
-            if (this.Storage.Kinds == LanguageKinds.Default) { NotifyStateChanged(); return this.Storage.Kinds; }
             this.Storage.Kinds = LanguageKinds.Default;
             SwitchBase(code);
             return this.Storage.Kinds;
         }
         public LanguageKinds SwitchToUnDefault(string code = null)
         {
-            if (this.Storage.Kinds == LanguageKinds.UnDefault) { NotifyStateChanged(); return this.Storage.Kinds; }
             this.Storage.Kinds = LanguageKinds.UnDefault;
             SwitchBase(code);
             return this.Storage.Kinds;
@@ -195,14 +202,12 @@ namespace AppTranslate.Translate
         }
         public async Task<LanguageKinds> SwitchToDefaultAsync(string code = null)
         {
-            if (this.Storage.Kinds == LanguageKinds.Default) { NotifyStateChanged(); return this.Storage.Kinds; }
             this.Storage.Kinds = LanguageKinds.Default;
             await SwitchBaseAsync(code);
             return this.Storage.Kinds;
         }
         public async Task<LanguageKinds> SwitchToUnDefaultAsync(string code = null)
         {
-            if (this.Storage.Kinds == LanguageKinds.UnDefault) { NotifyStateChanged(); return this.Storage.Kinds; }
             this.Storage.Kinds = LanguageKinds.UnDefault;
             await SwitchBaseAsync(code);
             return this.Storage.Kinds;
@@ -211,14 +216,11 @@ namespace AppTranslate.Translate
 
         public async ValueTask<LanguageKinds> Switch(string thesaurusPath, string code = null)
         {
-            Console.WriteLine(this.Storage.Path);
-
             if (this.Storage.Path.Equals(thesaurusPath)) {
-                Console.WriteLine("csoco");
                 await SwitchAsync(code); return this.Storage.Kinds;}
-            Console.WriteLine("coco");
+
             this.Storage.Path = thesaurusPath;
-            await GetThesaurus(thesaurusPath);
+            await GetThesaurus();
             await SwitchToUnDefaultAsync(code);
             return this.Storage.Kinds;
         }
@@ -260,7 +262,13 @@ namespace AppTranslate.Translate
 
         #region Notify
         public event Action OnChange;
+
         private void NotifyStateChanged() => OnChange?.Invoke();
+        private async Task NotifyStateChangedAsync() => await Task.Run(()=>OnChange?.Invoke());
+
+        //public event Func<Task> OnChangeAsync;
+        //private async Task NotifyStateChangedAsync() =>  await OnChangeAsync.Invoke();
+
         #endregion
 
         private void AppLog()
