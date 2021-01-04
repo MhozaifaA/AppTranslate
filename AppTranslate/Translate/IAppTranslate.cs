@@ -70,14 +70,24 @@ namespace AppTranslate.Translate
         ValueTask InjectAsync(string key = null);
 
         /// <summary>
+        /// support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="false"/>
+        /// </summary>
+        void OnceSupportLTR();
+
+        /// <summary>
         /// support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="true"/>
         /// </summary>
         void OnceSupportRTL();
 
         /// <summary>
-        /// support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="false"/>
+        /// Async support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="false"/>
         /// </summary>
-        void OnceSupportLTR();
+        ValueTask OnceSupportLTRAsync();
+
+        /// <summary>
+        /// Async support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="true"/>
+        /// </summary>
+        ValueTask OnceSupportRTLAsync();
 
         /// <summary>
         /// switch side  as flip bettwen left side and right side in Thesaurus file

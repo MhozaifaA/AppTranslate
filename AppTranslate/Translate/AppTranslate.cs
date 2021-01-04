@@ -31,7 +31,7 @@ namespace AppTranslate.Translate
 
 
       //  private string ThesaurusPath { get; set; }
-        private bool SupportRTL { get; set; } = false;
+     //   private bool SupportRTL { get; set; } = false;
 
         private readonly HttpClient httpClient;
 
@@ -98,7 +98,6 @@ namespace AppTranslate.Translate
         }
         private async ValueTask WriteKindStorageAsync(string key = null)
         {
-
             string kind = (key is null) ? await localStorage.GetItemAsync() :
                                           await localStorage.GetItemAsync(key);
             if (string.IsNullOrEmpty(kind))
@@ -109,23 +108,25 @@ namespace AppTranslate.Translate
 
         private void WriteStorage(string key = null)
         {
-            TranslateStorage Storage = (key is null) ? localStorage.GetItem<TranslateStorage>() :
+            #nullable enable
+            TranslateStorage? Storage = (key is null) ? localStorage.GetItem<TranslateStorage>() :
                                        localStorage.GetItem<TranslateStorage>(key);
-
-            if (Storage is null)
-                localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path));
+            #nullable disable
+            if (Storage is null || String.IsNullOrEmpty(Storage?.Path))
+                localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path,this.Storage.Code , Storage.SupportRTL));
             else
                 this.Storage = Storage;
         }
 
         private async ValueTask WriteStorageAsync(string key = null)
         {
-
-            TranslateStorage Storage = (key is null) ? await localStorage.GetItemAsync<TranslateStorage>() :
+            #nullable enable
+            TranslateStorage? Storage = (key is null) ? await localStorage.GetItemAsync<TranslateStorage>() :
                                       await  localStorage.GetItemAsync<TranslateStorage>(key);
+            #nullable disable
 
             if (Storage is null)
-               await localStorage.SetItemAsync<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path));
+               await localStorage.SetItemAsync<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path, this.Storage.Code, Storage.SupportRTL));
             else
                 this.Storage = Storage;
         }
@@ -210,9 +211,12 @@ namespace AppTranslate.Translate
 
         public async ValueTask<LanguageKinds> Switch(string thesaurusPath, string code = null)
         {
-            if (this.Storage.Path.Equals(thesaurusPath))
-            { await SwitchAsync(code); return this.Storage.Kinds; }
+            Console.WriteLine(this.Storage.Path);
 
+            if (this.Storage.Path.Equals(thesaurusPath)) {
+                Console.WriteLine("csoco");
+                await SwitchAsync(code); return this.Storage.Kinds;}
+            Console.WriteLine("coco");
             this.Storage.Path = thesaurusPath;
             await GetThesaurus(thesaurusPath);
             await SwitchToUnDefaultAsync(code);
@@ -224,21 +228,46 @@ namespace AppTranslate.Translate
 
         #region -   Util   -
 
+        public bool IsDefault => this.Storage.Kinds == LanguageKinds.Default;
+        public string Path => this.Storage.Path;
+        public string Code => this.Storage.Code;
+        public bool IsSupportRTL => this.Storage.SupportRTL;
+
+
+        public void OnceSupportLTR() {
+            this.Storage.SupportRTL = false;
+            localStorage.SetItem<TranslateStorage>(this.Storage);
+            NotifyStateChanged();
+        }
+        public void OnceSupportRTL() {
+            this.Storage.SupportRTL = true;
+            localStorage.SetItem<TranslateStorage>(this.Storage);
+            NotifyStateChanged();
+        }
+
+
+        public async ValueTask OnceSupportLTRAsync() {
+            this.Storage.SupportRTL = false;
+            await localStorage.SetItemAsync<TranslateStorage>(this.Storage);
+            NotifyStateChanged();
+        }
+
+        public async ValueTask OnceSupportRTLAsync() {
+            this.Storage.SupportRTL = true;
+            await localStorage.SetItemAsync<TranslateStorage>(this.Storage);
+            NotifyStateChanged();
+        }
+
+        #region Notify
+        public event Action OnChange;
+        private void NotifyStateChanged() => OnChange?.Invoke();
+        #endregion
+
         private void AppLog()
         {
             if (!IsServerSide)
                 Console.WriteLine(ConsoleLog);
         }
-        public bool IsDefault => this.Storage.Kinds == LanguageKinds.Default;
-        public string Path => this.Storage.Path;
-        public string Code => this.Storage.Code;
-        public void OnceSupportRTL() =>  SupportRTL = true;
-        public void OnceSupportLTR() => SupportRTL = false;
-        public bool IsSupportRTL => SupportRTL;
-        #region Notify
-        public event Action OnChange;
-        private void NotifyStateChanged() => OnChange?.Invoke();
-        #endregion
 
         #endregion
 

@@ -1,4 +1,6 @@
-﻿using AppTranslate.Translate.Option;
+﻿using AppTranslate.Translate.Classes;
+using AppTranslate.Translate.Enums;
+using AppTranslate.Translate.Option;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
