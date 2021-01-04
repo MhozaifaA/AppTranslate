@@ -1,15 +1,7 @@
-﻿using AppTranslate.Translate.Classes;
-using AppTranslate.Translate.Enums;
-using AppTranslate.Translate.Option;
+﻿using AppTranslate.Translate.Option;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using Microsoft.JSInterop.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AppTranslate.Translate.Interop

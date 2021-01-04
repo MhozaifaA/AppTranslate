@@ -2,15 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using AppTranslate.Translate.Option;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Net;
 using AppTranslate.Translate.Enums;
 using AppTranslate.Translate.Classes;
 
