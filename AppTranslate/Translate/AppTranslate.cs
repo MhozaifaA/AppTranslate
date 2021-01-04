@@ -104,7 +104,7 @@ namespace AppTranslate.Translate
                                        localStorage.GetItem<TranslateStorage>(key);
             #nullable disable
             if (Storage is null || String.IsNullOrEmpty(Storage?.Path))
-                localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path,this.Storage.Code , Storage.SupportRTL));
+                localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path,this.Storage?.Code , Storage?.SupportRTL??false));
             else
             {
                 if (!this.Storage.Path.Equals(Storage.Path))
