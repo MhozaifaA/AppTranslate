@@ -48,30 +48,17 @@
         {
             case "default":
                 Translate.OnceSupportLTR();
-                if (!Translate.IsDefault)
-                    Translate.Switch("en");
+                Translate.SwitchToDefault("en");
                 break;
 
             case "fr":
                 Translate.OnceSupportLTR();
-                if (Translate.Path == "thesaurusFR.json")
-                {
-                    if (Translate.IsDefault)
-                        Translate.Switch("fr");
-                }
-                else
-                    Translate.ChangeThesaurus("thesaurusFR.json", "fr");
+                Translate.Switch("thesaurusFR.json","fr");
                 break;
 
             case "ar":
                 Translate.OnceSupportRTL();
-                if (Translate.Path == "thesaurus.json")
-                {
-                    if (Translate.IsDefault)
-                        Translate.Switch("ar");
-                }
-                else
-                    Translate.ChangeThesaurus("thesaurus.json", "ar");
+                Translate.Switch("thesaurus.json", "ar");
                 break;
 
             default:

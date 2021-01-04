@@ -20,9 +20,8 @@ namespace AppTranslate.Translate.Enums
         //}
 
 
-        public static LanguageKinds Switch( this LanguageKinds kind , bool toUndefault = false)
+        public static LanguageKinds Switch(this LanguageKinds kind )
         {
-            if (toUndefault) return LanguageKinds.UnDefault;
             return  kind == LanguageKinds.Default ? LanguageKinds.UnDefault : LanguageKinds.Default;
         }
     }

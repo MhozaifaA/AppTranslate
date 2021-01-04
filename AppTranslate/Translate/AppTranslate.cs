@@ -46,7 +46,7 @@ namespace AppTranslate.Translate
             this.httpClient = Options.Value.httpClient;
             this.localStorage = localStorage;
 
-            InitOption(Options);
+            InitProperties(Options);
 
             WriteStorage();
 
@@ -55,7 +55,7 @@ namespace AppTranslate.Translate
             AppLog();
         }
 
-        private void InitOption(IOptions<AppTranslateOptions> Options)
+        private void InitProperties(IOptions<AppTranslateOptions> Options)
         {
             this.IsServerSide = Options.Value.IsServerSide;
             this.ThesaurusPath = Options.Value.ThesaurusPath;
@@ -64,16 +64,19 @@ namespace AppTranslate.Translate
 
         public async ValueTask ChangeThesaurus(string thesaurusPath, string code = null)
         {
-            if (ThesaurusPath.Equals(thesaurusPath))  return;
-
             ThesaurusPath = thesaurusPath;
+            await GetThesaurus(thesaurusPath);
+            SwitchToUnDefault(code);
+        }
+
+        private async ValueTask GetThesaurus(string thesaurusPath)
+        {
             if (httpClient is not null && !string.IsNullOrEmpty(thesaurusPath))
             {
                 var _lang = await httpClient.GetFromJsonAsync<Dictionary<string, string>>(thesaurusPath).ConfigureAwait(false);
                 Translate = new ReadOnlyDictionary<string, string>(_lang);
                 //  _lang.Clear();
             }
-            Switch(code, true);
         }
 
         #endregion
@@ -121,22 +124,74 @@ namespace AppTranslate.Translate
 
 
         #region -   Switch   -
-        public LanguageKinds Switch(string code = null, bool toUndefault = false)
+      
+        private void SwitchBase(string code = null)
         {
-            Language=Language.Switch(toUndefault);
             LanguageCode = code ?? LanguageCode;
             localStorage.SetItem(Language.ToString());
             NotifyStateChanged();
+        }
+        public LanguageKinds Switch(string code = null)
+        {
+            Language = Language.Switch();
+            SwitchBase(code);
             return Language;
         }
-        public async Task<LanguageKinds> SwitchAsync(string code = null, bool toUndefault = false)
+        public LanguageKinds SwitchToDefault(string code = null)
         {
-            Language = Language.Switch(toUndefault);
+            if (Language == LanguageKinds.Default) { NotifyStateChanged();  return Language;   } 
+            Language = LanguageKinds.Default;
+            SwitchBase(code);
+            return Language;
+        }
+        public LanguageKinds SwitchToUnDefault(string code = null)
+        {
+            if (Language == LanguageKinds.UnDefault) { NotifyStateChanged(); return Language; }
+            Language = LanguageKinds.UnDefault;
+            SwitchBase(code);
+            return Language;
+        }
+
+
+        private async Task SwitchBaseAsync(string code = null)
+        {
             LanguageCode = code ?? LanguageCode;
             await localStorage.SetItemAsync(Language.ToString());
             NotifyStateChanged();
+        }
+        public async Task<LanguageKinds> SwitchAsync(string code = null)
+        {
+            Language = Language.Switch();
+            await SwitchBaseAsync(code);
             return Language;
         }
+        public async Task<LanguageKinds> SwitchToDefaultAsync(string code = null)
+        {
+            if (Language == LanguageKinds.Default) { NotifyStateChanged(); return Language; }
+            Language = LanguageKinds.Default;
+            await SwitchBaseAsync(code);
+            return Language;
+        }
+        public async Task<LanguageKinds> SwitchToUnDefaultAsync(string code = null)
+        {
+            if (Language == LanguageKinds.UnDefault) { NotifyStateChanged(); return Language; }
+            Language = LanguageKinds.UnDefault;
+            await SwitchBaseAsync(code);
+            return Language;
+        }
+
+
+        public async ValueTask<LanguageKinds> Switch(string thesaurusPath, string code = null)
+        {
+            if (ThesaurusPath.Equals(thesaurusPath))
+            { await SwitchAsync(code); return Language; }
+
+            ThesaurusPath = thesaurusPath;
+            await GetThesaurus(thesaurusPath);
+            await SwitchToUnDefaultAsync(code); 
+            return Language;
+        }
+
         #endregion
 
 

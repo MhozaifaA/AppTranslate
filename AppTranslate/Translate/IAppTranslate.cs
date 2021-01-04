@@ -80,12 +80,28 @@ namespace AppTranslate.Translate
         void OnceSupportLTR();
 
         /// <summary>
-        /// switch side  as flip bettwen legt side and right side in Thesaurus file
+        /// switch side  as flip bettwen left side and right side in Thesaurus file
         /// </summary>
         /// <param name="code"> is optional to help checking in app </param>
-        /// <param name="toUndefault"> force to swap to undefaind kinds </param>
         /// <returns></returns>
-        LanguageKinds Switch(string code = null, bool toUndefault = false);
+        LanguageKinds Switch(string code = null);
+
+
+        /// <summary>
+        /// switch to left side 
+        /// </summary>
+        /// <param name="code"> is optional to help checking in app </param>
+        /// <returns></returns>
+        LanguageKinds SwitchToDefault(string code = null);
+
+
+        /// <summary>
+        /// switch to roght side 
+        /// </summary>
+        /// <param name="code"> is optional to help checking in app </param>
+        /// <returns></returns>
+        LanguageKinds SwitchToUnDefault(string code = null);
+
 
         /// <summary>
         /// Async switch side  as flip bettwen legt side and right side in Thesaurus file 
@@ -93,6 +109,30 @@ namespace AppTranslate.Translate
         /// <param name="code"> is optional to help checking in app </param>
         /// <param name="toUndefault"> force to swap to undefaind kinds </param>
         /// <returns></returns>
-        Task<LanguageKinds> SwitchAsync(string code = null, bool toUndefault = false);
+        Task<LanguageKinds> SwitchAsync(string code = null);
+
+
+        /// <summary>
+        /// Async switch to left side 
+        /// </summary>
+        /// <param name="code"> is optional to help checking in app </param>
+        /// <returns></returns>
+        Task<LanguageKinds> SwitchToDefaultAsync(string code = null);
+
+        /// <summary>
+        /// Async switch to right side 
+        /// </summary>
+        /// <param name="code"> is optional to help checking in app </param>
+        /// <returns></returns>
+        Task<LanguageKinds> SwitchToUnDefaultAsync(string code = null);
+
+
+        /// <summary>
+        /// witch with new path file else normal flip <see cref="Switch(string)"/> if downlaod flip to undefault side
+        /// </summary>
+        /// <param name="thesaurusPath"> will not force redownload if exist  </param>
+        /// <param name="code"></param>
+        /// <returns> optional async/sync </returns>
+        ValueTask<LanguageKinds> Switch(string thesaurusPath, string code = null);
     }
 }

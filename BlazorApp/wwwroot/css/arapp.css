@@ -4,6 +4,9 @@ html{
     unicode-bidi: isolate;
 }
 
+.rnav {
+    padding-right: 0 !important;
+}
 /*body {
     -moz-transform: scaleX(-1) !important;
     -o-transform: scaleX(-1) !important;
