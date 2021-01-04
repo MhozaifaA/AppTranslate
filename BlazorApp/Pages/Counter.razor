@@ -15,6 +15,7 @@
     <option selected="@(Translate.Code=="en")" value="default">en</option>
     <option selected="@(Translate.Code=="ar")" value="ar">ar</option>
     <option selected="@(Translate.Code=="fr")" value="fr">fr</option>
+    <option selected="@(Translate.Code=="es")" value="es">es</option>
 </select>
 
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
@@ -49,6 +50,11 @@
             case "default":
                 Translate.OnceSupportLTR();
                 Translate.SwitchToDefault("en");
+                break;
+
+            case "es":
+                Translate.OnceSupportLTR();
+                Translate.Switch("thesaurusES.json", "es");
                 break;
 
             case "fr":
