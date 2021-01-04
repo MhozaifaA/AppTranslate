@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace AppTranslate.Translate.Classes
 {
-    public class TranslateStorage
+    public record TranslateStorage(LanguageKinds Kinds=LanguageKinds.Default, string Path="" , string Code=null, bool SupportRTL=false)
     {
         public LanguageKinds Kinds { get; set; }
-        public string Code{ get; set; }
         public string Path { get; set; }
+        public string Code { get; set; }
+        public bool SupportRTL { get; set; }
     }
 }

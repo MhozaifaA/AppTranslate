@@ -21,23 +21,26 @@ namespace AppTranslate.Translate
 
         public IReadOnlyDictionary<string, string> Translate { get; set; }
 
-        public string LanguageCode { get; set; }
+       // public string LanguageCode { get; set; }
         public const string loadingLanguange = "...";
         public const string ConsoleLog = " :::::::::::: AppTranslate Injected :::::::::::: ";
 
         public string this[string index]
-             => Translate.Count == 0 ? loadingLanguange : (Language == LanguageKinds.UnDefault ?
+             => Translate.Count == 0 ? loadingLanguange : (Storage.Kinds == LanguageKinds.UnDefault ?
          (Translate.GetValueOrDefault(index) ?? index) : index);
 
 
-        private string ThesaurusPath { get; set; }
+      //  private string ThesaurusPath { get; set; }
         private bool SupportRTL { get; set; } = false;
 
         private readonly HttpClient httpClient;
 
         private readonly LocalStorage localStorage;
 
-        private LanguageKinds Language { get; set; } = LanguageKinds.Default;
+        //private LanguageKinds Language { get; set; } = LanguageKinds.Default;
+
+        private TranslateStorage Storage = new (LanguageKinds.Default,default(string));
+
         private bool IsServerSide { get; set; }
 
 
@@ -46,9 +49,8 @@ namespace AppTranslate.Translate
         {
             this.httpClient = Options.Value.httpClient;
             this.localStorage = localStorage;
-
+            
             InitProperties(Options);
-
             WriteStorage();
 
             Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
@@ -59,13 +61,14 @@ namespace AppTranslate.Translate
         private void InitProperties(IOptions<AppTranslateOptions> Options)
         {
             this.IsServerSide = Options.Value.IsServerSide;
-            this.ThesaurusPath = Options.Value.ThesaurusPath;
-            this.LanguageCode = Options.Value.Code;
+
+            this.Storage.Path = Options.Value.ThesaurusPath;
+            this.Storage.Code = Options.Value.Code;
         }
 
         public async ValueTask ChangeThesaurus(string thesaurusPath, string code = null)
         {
-            ThesaurusPath = thesaurusPath;
+            this.Storage.Path = thesaurusPath;
             await GetThesaurus(thesaurusPath);
             SwitchToUnDefault(code);
         }
@@ -84,36 +87,48 @@ namespace AppTranslate.Translate
 
 
         #region -   Storage   -
-        private void WriteStorage(string key = null)
+        private void WriteKindStorage(string key = null)
         {
             string kind = (key is null) ? localStorage.GetItem() :
                                         localStorage.GetItem(key);
             if (string.IsNullOrEmpty(kind))
-                localStorage.SetItem((Language = LanguageKinds.Default).ToString());
+                localStorage.SetItem((this.Storage.Kinds = LanguageKinds.Default).ToString());
             else
-                Language = kind.ToEnum<LanguageKinds>();
+                this.Storage.Kinds = kind.ToEnum<LanguageKinds>();
         }
-        private async ValueTask WriteStorageAsync(string key = null)
+        private async ValueTask WriteKindStorageAsync(string key = null)
         {
 
             string kind = (key is null) ? await localStorage.GetItemAsync() :
                                           await localStorage.GetItemAsync(key);
             if (string.IsNullOrEmpty(kind))
-                await localStorage.SetItemAsync((Language = LanguageKinds.Default).ToString());
+                await localStorage.SetItemAsync((this.Storage.Kinds = LanguageKinds.Default).ToString());
             else
-                Language = kind.ToEnum<LanguageKinds>();
+                this.Storage.Kinds = kind.ToEnum<LanguageKinds>();
         }
 
+        private void WriteStorage(string key = null)
+        {
+            TranslateStorage Storage = (key is null) ? localStorage.GetItem<TranslateStorage>() :
+                                       localStorage.GetItem<TranslateStorage>(key);
 
-        //private void WriteStorage(TranslateStorage storage=null)
-        //{
-        //    string kind = (storage is null) ? localStorage.GetItem<TranslateStorage>() :
-        //                               localStorage.GetItem<TranslateStorage>(key);
-        //    if (string.IsNullOrEmpty(kind))
-        //        localStorage.SetItem((Language = LanguageKinds.Default).ToString());
-        //    else
-        //        Language = kind.ToEnum<LanguageKinds>();
-        //}
+            if (Storage is null)
+                localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path));
+            else
+                this.Storage = Storage;
+        }
+
+        private async ValueTask WriteStorageAsync(string key = null)
+        {
+
+            TranslateStorage Storage = (key is null) ? await localStorage.GetItemAsync<TranslateStorage>() :
+                                      await  localStorage.GetItemAsync<TranslateStorage>(key);
+
+            if (Storage is null)
+               await localStorage.SetItemAsync<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path));
+            else
+                this.Storage = Storage;
+        }
         #endregion
 
 
@@ -139,69 +154,69 @@ namespace AppTranslate.Translate
 
         private void SwitchBase(string code = null)
         {
-            LanguageCode = code ?? LanguageCode;
-            localStorage.SetItem(Language.ToString());
+            this.Storage.Code = code ?? this.Storage.Code;
+            localStorage.SetItem<TranslateStorage>(this.Storage);
             NotifyStateChanged();
         }
         public LanguageKinds Switch(string code = null)
         {
-            Language = Language.Switch();
+            this.Storage.Kinds = this.Storage.Kinds.Switch();
             SwitchBase(code);
-            return Language;
+            return this.Storage.Kinds;
         }
         public LanguageKinds SwitchToDefault(string code = null)
         {
-            if (Language == LanguageKinds.Default) { NotifyStateChanged(); return Language; }
-            Language = LanguageKinds.Default;
+            if (this.Storage.Kinds == LanguageKinds.Default) { NotifyStateChanged(); return this.Storage.Kinds; }
+            this.Storage.Kinds = LanguageKinds.Default;
             SwitchBase(code);
-            return Language;
+            return this.Storage.Kinds;
         }
         public LanguageKinds SwitchToUnDefault(string code = null)
         {
-            if (Language == LanguageKinds.UnDefault) { NotifyStateChanged(); return Language; }
-            Language = LanguageKinds.UnDefault;
+            if (this.Storage.Kinds == LanguageKinds.UnDefault) { NotifyStateChanged(); return this.Storage.Kinds; }
+            this.Storage.Kinds = LanguageKinds.UnDefault;
             SwitchBase(code);
-            return Language;
+            return this.Storage.Kinds;
         }
 
 
         private async Task SwitchBaseAsync(string code = null)
         {
-            LanguageCode = code ?? LanguageCode;
-            await localStorage.SetItemAsync(Language.ToString());
+            this.Storage.Code = code ?? this.Storage.Code;
+            await localStorage.SetItemAsync<TranslateStorage>(this.Storage);
             NotifyStateChanged();
         }
         public async Task<LanguageKinds> SwitchAsync(string code = null)
         {
-            Language = Language.Switch();
+            this.Storage.Kinds = this.Storage.Kinds.Switch();
             await SwitchBaseAsync(code);
-            return Language;
+            return this.Storage.Kinds;
         }
         public async Task<LanguageKinds> SwitchToDefaultAsync(string code = null)
         {
-            if (Language == LanguageKinds.Default) { NotifyStateChanged(); return Language; }
-            Language = LanguageKinds.Default;
+            if (this.Storage.Kinds == LanguageKinds.Default) { NotifyStateChanged(); return this.Storage.Kinds; }
+            this.Storage.Kinds = LanguageKinds.Default;
             await SwitchBaseAsync(code);
-            return Language;
+            return this.Storage.Kinds;
         }
         public async Task<LanguageKinds> SwitchToUnDefaultAsync(string code = null)
         {
-            if (Language == LanguageKinds.UnDefault) { NotifyStateChanged(); return Language; }
-            Language = LanguageKinds.UnDefault;
+            if (this.Storage.Kinds == LanguageKinds.UnDefault) { NotifyStateChanged(); return this.Storage.Kinds; }
+            this.Storage.Kinds = LanguageKinds.UnDefault;
             await SwitchBaseAsync(code);
-            return Language;
+            return this.Storage.Kinds;
         }
 
 
         public async ValueTask<LanguageKinds> Switch(string thesaurusPath, string code = null)
         {
-            if (ThesaurusPath.Equals(thesaurusPath))
-            { await SwitchAsync(code); return Language; }
+            if (this.Storage.Path.Equals(thesaurusPath))
+            { await SwitchAsync(code); return this.Storage.Kinds; }
 
-            ThesaurusPath = thesaurusPath;
+            this.Storage.Path = thesaurusPath;
             await GetThesaurus(thesaurusPath);
             await SwitchToUnDefaultAsync(code);
-            return Language;
+            return this.Storage.Kinds;
         }
 
         #endregion
@@ -214,8 +229,9 @@ namespace AppTranslate.Translate
             if (!IsServerSide)
                 Console.WriteLine(ConsoleLog);
         }
-        public bool IsDefault => Language == LanguageKinds.Default;
-        public string Path => ThesaurusPath;
+        public bool IsDefault => this.Storage.Kinds == LanguageKinds.Default;
+        public string Path => this.Storage.Path;
+        public string Code => this.Storage.Code;
         public void OnceSupportRTL() =>  SupportRTL = true;
         public void OnceSupportLTR() => SupportRTL = false;
         public bool IsSupportRTL => SupportRTL;

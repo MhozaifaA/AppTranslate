@@ -77,6 +77,7 @@ namespace AppTranslate.Translate.Interop
 
         #region -   GetItem   -
 
+     
         #region Sync
         public string GetItem()  => GetItem(default_localStorage_Key);
         public string GetItem(string key) => GetItem<string>(key);
@@ -86,7 +87,13 @@ namespace AppTranslate.Translate.Interop
             if (ThrowUnRenderInject()) return default;
 
             if (jSInProcessRuntime is not null)
-                return jSInProcessRuntime.Invoke<T>(js_localStorage_getItem, key);
+            {
+                if (typeof(T) == typeof(string))
+                    return jSInProcessRuntime.Invoke<T>(js_localStorage_getItem, key);
+                var storage = jSInProcessRuntime.Invoke<string>(js_localStorage_getItem, key);
+                if (storage is null)  return default(T);
+                return JsonSerializer.Deserialize<T>(storage); 
+            }
             else
                 return default(T);
             //return Task.Factory.StartNew(async ()=>await jsRuntime.InvokeAsync<T>(js_localStorage_getItem, default_localStorage_Key)).Result.Result;
@@ -100,7 +107,13 @@ namespace AppTranslate.Translate.Interop
         public async ValueTask<T> GetItemAsync<T>(string key)
         {
             if (ThrowUnRenderInject()) return default;
-            return await jsRuntime.InvokeAsync<T>(js_localStorage_getItem, key).ConfigureAwait(false);
+
+            if (typeof(T) == typeof(string))
+                return await jSInProcessRuntime.InvokeAsync<T>(js_localStorage_getItem, key).ConfigureAwait(false);
+            var storage = await jsRuntime.InvokeAsync<string>(js_localStorage_getItem, key).ConfigureAwait(false);
+            if (storage is null) return default(T);
+            return JsonSerializer.Deserialize<T>(storage);
+          //  return await jsRuntime.InvokeAsync<T>(js_localStorage_getItem, key).ConfigureAwait(false);
         }
         #endregion
 

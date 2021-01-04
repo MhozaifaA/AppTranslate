@@ -29,7 +29,7 @@ namespace AppTranslate.Translate
         /// LanguageCode optional and not checking
         /// can use as custom check for your app
         /// </summary>
-        string LanguageCode { get; set; }
+        string Code { get;}
 
         /// <summary>
         /// get Thesaurus file path 

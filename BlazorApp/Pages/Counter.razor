@@ -12,9 +12,9 @@
 
 
 <select class="form-control w-25" @onchange="HandelSelectChanged">
-    <option selected="@(Translate.LanguageCode=="en")" value="default">en</option>
-    <option selected="@(Translate.LanguageCode=="ar")" value="ar">ar</option>
-    <option selected="@(Translate.LanguageCode=="fr")" value="fr">fr</option>
+    <option selected="@(Translate.Code=="en")" value="default">en</option>
+    <option selected="@(Translate.Code=="ar")" value="ar">ar</option>
+    <option selected="@(Translate.Code=="fr")" value="fr">fr</option>
 </select>
 
 <h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
