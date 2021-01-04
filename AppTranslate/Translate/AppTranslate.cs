@@ -124,7 +124,7 @@ namespace AppTranslate.Translate
 
 
         #region -   Switch   -
-      
+
         private void SwitchBase(string code = null)
         {
             LanguageCode = code ?? LanguageCode;
@@ -139,7 +139,7 @@ namespace AppTranslate.Translate
         }
         public LanguageKinds SwitchToDefault(string code = null)
         {
-            if (Language == LanguageKinds.Default) { NotifyStateChanged();  return Language;   } 
+            if (Language == LanguageKinds.Default) { NotifyStateChanged(); return Language; }
             Language = LanguageKinds.Default;
             SwitchBase(code);
             return Language;
@@ -188,7 +188,7 @@ namespace AppTranslate.Translate
 
             ThesaurusPath = thesaurusPath;
             await GetThesaurus(thesaurusPath);
-            await SwitchToUnDefaultAsync(code); 
+            await SwitchToUnDefaultAsync(code);
             return Language;
         }
 
@@ -204,7 +204,7 @@ namespace AppTranslate.Translate
         }
         public bool IsDefault => Language == LanguageKinds.Default;
         public string Path => ThesaurusPath;
-        public void OnceSupportRTL() => SupportRTL = true;
+        public void OnceSupportRTL() =>  SupportRTL = true;
         public void OnceSupportLTR() => SupportRTL = false;
         public bool IsSupportRTL => SupportRTL;
         #region Notify

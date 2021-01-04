@@ -107,7 +107,6 @@ namespace AppTranslate.Translate
         /// Async switch side  as flip bettwen legt side and right side in Thesaurus file 
         /// </summary>
         /// <param name="code"> is optional to help checking in app </param>
-        /// <param name="toUndefault"> force to swap to undefaind kinds </param>
         /// <returns></returns>
         Task<LanguageKinds> SwitchAsync(string code = null);
 

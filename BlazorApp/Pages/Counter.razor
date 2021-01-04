@@ -47,18 +47,18 @@
         switch (e.Value.ToString())
         {
             case "default":
-                Translate.OnceSupportLTR();
                 Translate.SwitchToDefault("en");
+                Translate.OnceSupportLTR();
                 break;
 
             case "fr":
-                Translate.OnceSupportLTR();
                 Translate.Switch("thesaurusFR.json","fr");
+                Translate.OnceSupportLTR();
                 break;
 
             case "ar":
-                Translate.OnceSupportRTL();
                 Translate.Switch("thesaurus.json", "ar");
+                Translate.OnceSupportRTL();
                 break;
 
             default:
