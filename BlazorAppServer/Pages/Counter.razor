@@ -1,41 +1,92 @@
 ﻿@page "/counter"
-@using AppTranslate
 @inject AppTranslate.Translate.IAppTranslate Translate
+@inject IJSRuntime IJSRuntime
 @implements IDisposable
 
-<h1 class="arAlign">@Translate["Counter"]</h1>
 
-<p class="arAlign">@Translate["Current count"]: @currentCount</p>
+<h1 class="arFlip-1 arAlign">@Translate["Counter"]</h1>
 
-<button class="btn btn-primary arFlip" @onclick="IncrementCount">@Translate["Click me"]</button>
+<p class="arFlip-1 arAlign">@Translate["Current count"]: @currentCount</p>
 
-<h1 class="arAlign">@Translate["Hello"]</h1>
-
+<button class="btn btn-primary d-flex my-2" @onclick="IncrementCount">@Translate["Click me"]</button>
 
 
-@code { 
+<select class="form-control w-25" @onchange="HandelSelectChanged">
+    <option selected="@(Translate.Code=="en")" value="default">en</option>
+    <option selected="@(Translate.Code=="ar")" value="ar">ar</option>
+    <option selected="@(Translate.Code=="fr")" value="fr">fr</option>
+    <option selected="@(Translate.Code=="es")" value="es">es</option>
+</select>
+
+<h1 class="arFlip-1 arAlign">@Translate["Hello"]</h1>
+
+
+@code {
+    private int currentCount = 0;
+
+    [Parameter]
+    public int count { get; set; }
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
-            Translate.InjectAsync();
+            Translate.Inject();
     }
 
-    private int currentCount = 0;
     private void IncrementCount()
     {
         currentCount++;
-        var data=Translate.Switch();
     }
+
+    private void ChangeLanguge()
+    {
+        Translate.Switch();
+    }
+
+    private void ChangeFile()
+    {
+        Translate.ChangeThesaurus("thesaurusFR.json");
+    }
+
+
+    private void HandelSelectChanged(ChangeEventArgs e)
+    {
+        switch (e.Value.ToString())
+        {
+            case "default":
+                Translate.OnceSupportLTR();
+                Translate.SwitchToDefault("en");
+                break;
+
+            case "es":
+                Translate.OnceSupportLTR();
+                Translate.Switch("thesaurusES.json", "es");
+                break;
+
+            case "fr":
+                Translate.OnceSupportLTR();
+                Translate.Switch("thesaurusFR.json", "fr");
+                break;
+
+            case "ar":
+                Translate.OnceSupportRTL();
+                Translate.Switch("thesaurus.json", "ar");
+                break;
+
+            default:
+                break;
+        }
+    }
+
 
     protected override void OnInitialized()
     {
         Translate.OnChange += StateHasChanged;
     }
 
-
     public void Dispose()
     {
         Translate.OnChange -= StateHasChanged;
     }
+
 }
