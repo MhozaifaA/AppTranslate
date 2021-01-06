@@ -19,7 +19,6 @@ namespace AppTranslate.Translate
 
         public IReadOnlyDictionary<string, string> Translate { get; set; }
 
-       // public string LanguageCode { get; set; }
         public const string loadingLanguange = "...";
         public const string ConsoleLog = " :::::::::::: AppTranslate Injected :::::::::::: ";
 
