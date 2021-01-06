@@ -43,7 +43,7 @@ namespace AppTranslate.Translate
 
         /// <summary>
         /// notify event state with invoked by 
-        /// <para> <see cref="Switch(string, bool)"/> <see cref="SwitchAsync(string, bool)"/>  and <see cref="Inject(string)"/> <see cref="InjectAsync(string)"/>  </para>
+        /// <para> <see cref="Switch(string, bool)"/> <see cref="SwitchAsync(string, bool)"/>  and <see cref="Inject(string)"/> <see cref="Inject(string)"/>  </para>
         /// </summary>
         event Action OnChange;
 
@@ -56,18 +56,14 @@ namespace AppTranslate.Translate
         /// <returns></returns>
         ValueTask ChangeThesaurus(string thesaurusPath, string code = null);
 
-        /// <summary>
-        /// worked with server sie to injected afterRender
-        /// </summary>
-        /// <param name="key"></param>
-        void Inject(string key = null);
+     
 
         /// <summary>
-        /// worked with server sie to injected afterRenderAsync
+        /// worked with server sie to injected afterRender/Async
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        ValueTask InjectAsync(string key = null);
+        ValueTask Inject(string key = null);
 
         /// <summary>
         /// support rtl bt flip <see cref="IsSupportRTL"/> to <see langword="false"/>

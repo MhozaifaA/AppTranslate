@@ -6,6 +6,8 @@ using AppTranslate.Translate.Interop;
 using AppTranslate.Translate.Option;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.IO;
+using System.Text.Json;
 
 namespace AppTranslate.Translate.Configure
 {
@@ -34,16 +36,26 @@ namespace AppTranslate.Translate.Configure
 
 
 
+
         public static void AddAppTranslateServerSide(this IServiceCollection services, Action<AppTranslateOptions> configure)
         {
-            services.AddHttpClient();
             services.AddScoped<LocalStorage>().Configure<LocalStorageOptions>(configureOptions =>
             new Action<LocalStorageOptions>(a => a.IsServerSide = true).Invoke(configureOptions)).
                 AddScoped<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(configureOptions =>
                 {
                     configureOptions.IsServerSide = true;
-                    configureOptions.httpClient = services.GetHttpClientService();
                     configure?.Invoke(configureOptions);
+                });
+        }
+
+        public static void AddAppTranslateServerSide(this IServiceCollection services, string ThesaurusPath, string code = null)
+        {
+
+            services.AddScoped<LocalStorage>().Configure<LocalStorageOptions>(configureOptions =>
+            new Action<LocalStorageOptions>(a => a.IsServerSide = true).Invoke(configureOptions)).
+                AddScoped<IAppTranslate, AppTranslate>().Configure<AppTranslateOptions>(config => {
+                    config.ThesaurusPath = ThesaurusPath; config.Code = code;  //config.Thesaurus(data); 
+                    config.IsServerSide = true;
                 });
         }
 

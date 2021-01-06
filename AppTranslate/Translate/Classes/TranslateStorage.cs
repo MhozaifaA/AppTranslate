@@ -1,7 +1,9 @@
 ﻿using AppTranslate.Translate.Enums;
+using System;
 
 namespace AppTranslate.Translate.Classes
 {
+    [Serializable]
     public record TranslateStorage(LanguageKinds Kinds=LanguageKinds.Default, string Path="" , string Code=null, bool SupportRTL=false) 
     {
         public LanguageKinds Kinds { get; set; } = Kinds;

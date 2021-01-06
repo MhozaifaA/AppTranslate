@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using AppTranslate.Translate.Enums;
 using AppTranslate.Translate.Classes;
+using System.IO;
+using System.Text.Json;
 
 namespace AppTranslate.Translate
 {
@@ -40,6 +42,7 @@ namespace AppTranslate.Translate
             Translate = new ReadOnlyDictionary<string, string>(Options.Value.Translate);
             
             InitProperties(Options);
+            if(!IsServerSide)
             WriteStorage();
             AppLog();
         }
@@ -47,7 +50,6 @@ namespace AppTranslate.Translate
         private void InitProperties(IOptions<AppTranslateOptions> Options)
         {
             this.IsServerSide = Options.Value.IsServerSide;
-
             this.Storage.Path = Options.Value.ThesaurusPath;
             this.Storage.Code = Options.Value.Code;
         }
@@ -56,18 +58,31 @@ namespace AppTranslate.Translate
         {
             this.Storage.Path = thesaurusPath;
             await GetThesaurus();
-            SwitchToUnDefault(code);
+            if (IsServerSide)
+            await SwitchToUnDefaultAsync(code);
+            else
+                SwitchToUnDefault(code);
+
         }
 
         private async ValueTask GetThesaurus(bool notify=false)
         {
-            if (httpClient is not null && !string.IsNullOrEmpty(this.Storage.Path))
+            if (string.IsNullOrEmpty(this.Storage.Path))
+                return;
+
+            if (IsServerSide)
+            {
+                var file =await File.ReadAllTextAsync($"{Directory.GetCurrentDirectory()}{$@"\wwwroot\{this.Storage.Path}"}");
+                var _lang = JsonSerializer.Deserialize<Dictionary<string, string>>(file);
+                Translate = new ReadOnlyDictionary<string, string>(_lang);
+            }else
             {
                 var _lang = await httpClient.GetFromJsonAsync<Dictionary<string, string>>(this.Storage.Path).ConfigureAwait(false);
                 Translate = new ReadOnlyDictionary<string, string>(_lang);
-                if(notify)
-                NotifyStateChanged();
             }
+
+            if (notify)
+                NotifyStateChanged();
         }
 
         #endregion
@@ -103,14 +118,13 @@ namespace AppTranslate.Translate
                 localStorage.SetItem<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path,this.Storage?.Code , Storage?.SupportRTL??false));
             else
             {
-                if (!this.Storage.Path.Equals(Storage.Path))
+                if (!this.Storage.Path.Equals(Storage.Path) || this.Translate.Count == 0)
                 {
                     this.Storage = Storage;
-                    _ = GetThesaurus(true).ConfigureAwait(false);
-                  //  NotifyStateChanged();
+                   _ = GetThesaurus(true).ConfigureAwait(false);
+                    NotifyStateChanged();
                 }
                 this.Storage = Storage;
-
             }
         }
 
@@ -125,31 +139,23 @@ namespace AppTranslate.Translate
                await localStorage.SetItemAsync<TranslateStorage>(this.Storage = new TranslateStorage(LanguageKinds.Default, this.Storage.Path, this.Storage.Code, Storage.SupportRTL));
             else
             {
-                if (!this.Storage.Path.Equals(Storage.Path))
+                if (!this.Storage.Path.Equals(Storage.Path) || this.Translate.Count==0)
                 {
                     this.Storage = Storage;
                     await GetThesaurus();
-                   // NotifyStateChanged();
+                    NotifyStateChanged();
                 }
                 this.Storage = Storage;
-
             }
         }
         #endregion
 
 
         #region -   Inject   -
-        public void Inject(string key = null)
+        public async ValueTask Inject(string key = null)
         {
-            localStorage.ConsoleLog(ConsoleLog);
             localStorage.Inject();
-            if (key is null) WriteStorage(); else WriteStorage(key);
-            NotifyStateChanged();
-        }
-        public async ValueTask InjectAsync(string key = null)
-        {
             await localStorage.ConsoleLog(ConsoleLog);
-            localStorage.Inject();
             if (key is null) await WriteStorageAsync(); else await WriteStorageAsync(key);
             NotifyStateChanged();
         }

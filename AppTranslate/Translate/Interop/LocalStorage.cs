@@ -103,7 +103,7 @@ namespace AppTranslate.Translate.Interop
             if (ThrowUnRenderInject()) return default;
 
             if (typeof(T) == typeof(string))
-                return await jSInProcessRuntime.InvokeAsync<T>(js_localStorage_getItem, key).ConfigureAwait(false);
+                return await jsRuntime.InvokeAsync<T>(js_localStorage_getItem, key).ConfigureAwait(false);
             var storage = await jsRuntime.InvokeAsync<string>(js_localStorage_getItem, key).ConfigureAwait(false);
             if (storage is null) return default(T);
             return JsonSerializer.Deserialize<T>(storage);

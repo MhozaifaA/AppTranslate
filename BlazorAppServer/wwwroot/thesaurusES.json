@@ -1,0 +1,14 @@
+﻿{
+  "Hello": "Hola",
+  "Counter": "Contador",
+  "Current count": "Recuento actual",
+  "Click me": "Haz click en mi",
+  "BlazorApp": "BlazorApp",
+  "About": "Acerca de",
+  "Fetch data": "Obtener datos",
+  "Home": "Casa",
+  "Welcome to your new app": "Bienvenido a tu nueva aplicación",
+  "Hello, world!": "¡Hola Mundo!",
+  "Change language": "Cambiar idioma",
+  "Change File": "Cambiar archivo"
+}

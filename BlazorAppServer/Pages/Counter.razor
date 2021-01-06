@@ -27,11 +27,7 @@
     [Parameter]
     public int count { get; set; }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-            Translate.Inject();
-    }
+  
 
     private void IncrementCount()
     {

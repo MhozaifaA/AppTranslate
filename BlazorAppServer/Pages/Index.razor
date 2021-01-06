@@ -1,28 +1,20 @@
 ﻿@page "/"
 @inject AppTranslate.Translate.IAppTranslate Translate
+@implements IDisposable
 
-<h1>Hello, world!</h1>
+<h1 class="arFlip-1 arAlign">@Translate["Hello, world!"]</h1>
 
-Welcome to your new app.
-<h2>@Translate["Hello"]</h2>
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<p class="arFlip-1 arAlign">@Translate["Welcome to your new app"].</p>
+<h2 class="arFlip-1 arAlign">@Translate["Hello"]</h2>
 
 @code{
+
     protected override void OnInitialized()
     {
         Translate.OnChange += StateHasChanged;
     }
-
-
-
     public void Dispose()
     {
         Translate.OnChange -= StateHasChanged;
-    }
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-          Translate.InjectAsync();
     }
 }
