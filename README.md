@@ -7,7 +7,7 @@ sample with custom css suppurt ar/en
 
 ### `` check source code to figure more extensions:`` https://github.com/MhozaifaA/AppTranslate/tree/master/AppTranslate/Translate
 
-# How to use
+# Get started
 
 ## Blazor Client-Side
 **Inject in Program.cs**
@@ -16,7 +16,7 @@ using AppTranslate.Translate.Configure;
 //....
   builder.Services.AddAppTranslateClientSide(config=> config.Thesaurus( ("Hello" , "مرحبا") ) );              
 //....  or 
-   await services.AddAppTranslateServerSide("thesaurus.json");
+   await services.AddAppTranslateClientSide("thesaurus.json");
 //.... 
 ```
 
@@ -55,6 +55,8 @@ using AppTranslate.Translate.Configure;
 using AppTranslate.Translate.Configure;
 //....
     services.AddAppTranslateServerSide(config =>  config.Thesaurus(("Hello", "مرحبا")));
+    //....  or 
+    services.AddAppTranslateServerSide("thesaurus.json");
 //.... 
 ```
 
@@ -93,3 +95,42 @@ using AppTranslate.Translate.Configure;
    
 ```
 
+# Functionality
+
+```C# 
+ChangeThesaurus(thesaurusPath,code?) 
+
+``enabled async``
+Switch(code?)
+SwitchToDefault(code?)
+SwitchToUnDefault(code?)
+Switch(thesaurusPath,code?)
+
+``using only in server side``
+Inject(key?)
+
+``enabled async``
+OnceSupportLTR()
+OnceSupportRTL()
+
+``properties``
+IsDefault
+Path
+Code
+IsSupportRTL
+
+``state``
+Action OnChange
+```
+# What features in future!
+- Enable multi languages in one file
+- Stable async in WASM
+- Support own influencing HTML head included inside AppTranslate
+- Custome localization components
+- Default Language code in URL app
+- Storage localy files with reload
+
+# Samples
+``client side`` https://github.com/MhozaifaA/AppTranslate/tree/master/BlazorApp
+<br>
+``server side`` https://github.com/MhozaifaA/AppTranslate/tree/master/BlazorAppServer
