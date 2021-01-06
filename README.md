@@ -74,10 +74,10 @@ using AppTranslate.Translate.Configure;
         Translate.OnChange += StateHasChanged;
     }
     
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-            Translate.InjectAsync();
+            await Translate.Inject();
     }
     
     private void ChangeLanguge()
